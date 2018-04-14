@@ -21,10 +21,11 @@ Son mensajes enviados al encontrarse con errores en los datos o calculos
 print("ERROR", "Formato del CSV invalido", args["csv"], sep="\t")
 ```
 
-###} Mensaje de Resultado
-Informa el resultado final.
+### Mensaje de Resultado
+Informa un resultado.
 
     RESULT value
+#### Ejemplo
 
 ```python
     print("RESULT", value, sep="\t")
