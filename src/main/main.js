@@ -58,7 +58,6 @@ valorizeRemote = require('./valorizationRemote');
 
 //TODO diferenciar casos CSV y YAHOO
 ipc.on("valorize", (event, args) => {
-  console.log("Antes");
-  valorizeLocal(args["action_code"], args["action_name"]);
-  console.log("Después");
+  console.log("Llamando a script");
+  valorizeLocal(args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
 });

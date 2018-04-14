@@ -6,14 +6,14 @@ const PythonShell = require("python-shell");
  * Luego, envia y recibe los mensajes de estado (STATUS) del script
  * para ir mostrando el avance al usuario
  */
-function valorizeFromCSV(csv_path, action_code, action_name)
+function valorizeFromCSV(csv_path, action_code, action_name, r_value, option_type)
 {
   // Se definen las opciones para el script
   const options = {
     mode: "text",
     scriptPath: path.join(__dirname, "../common"),
     pythonOptions: ['-u'],
-    args: ["--file=" + csv_path, action_code, action_name]
+    args: ["--csv=" + csv_path, "--code=" + action_code, "--name="+action_name, "--r="+r_value, "--type="+option_type]
   }
 
   var shell =  new PythonShell('calculate.py', options)
