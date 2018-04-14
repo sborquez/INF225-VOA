@@ -61,4 +61,4 @@ typings/
 out/
 
 # Python cache
-src/common/__pycache__
+src/common/__pycache__/
