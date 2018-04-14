@@ -2,13 +2,17 @@ const electron = require('electron');
 const path = require('path');
 const url = require('url');
 
+/*
+ * Código básico para una aplicación de electron  
+ */
+
 const rendererDir = path.join(__dirname, '../renderer');
 
-const app = electron.app;
+const app = electron.app;       // aplicacion
 const ipc = electron.ipcMain;
 
 const BrowserWindow = electron.BrowserWindow;
-let mainWindow
+let mainWindow                  // ventana principal
 
 function createWindow () {
   mainWindow = new BrowserWindow({width: 800, height: 600})
@@ -40,6 +44,15 @@ app.on('activate', function () {
   }
 })
 
+
+/*
+ * Funcionalidades de nuestra aplicación
+ */
+
+ /* valorize
+  * Llama a un script de python ubicado en /common/calculate.py
+  * Se encarga de descargar y evaluar las acciones de una empresa dada
+  */
 valorize = require('./valorization');
 
 ipc.on("valorize", (event, args) => {
