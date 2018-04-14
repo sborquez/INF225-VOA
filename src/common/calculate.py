@@ -1,12 +1,22 @@
 import sys
+from time import sleep
+from valoriser import Valoriser
 
-action_code = sys.argv[1]
-action_name = sys.argv[2]
+def parseArgs(args):
+    return None
 
-def valorize(action_code, action_name):
-  #TODO implement this function
-  not_implemented_log = "esta caracteristica aun no esta implementada, pero sus inputs fueron: {}, {}"
-  return not_implemented_log.format(action_code, action_name)
+def main():
+    args = parseArgs(sys.argv)
+    valoriser = Valoriser()
 
-print(str(valorize(action_code, action_name)))
-sys.stdout.flush()
+    # hacer diferentes cosas segun los argumentos dados
+
+
+    # TEST
+    print("Dormire 5 segundos")
+    sleep(5)
+    print("Termine")
+    sys.stdout.flush()
+
+if __name__ == '__main__':
+    main()

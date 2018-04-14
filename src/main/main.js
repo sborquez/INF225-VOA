@@ -53,8 +53,12 @@ app.on('activate', function () {
   * Llama a un script de python ubicado en /common/calculate.py
   * Se encarga de descargar y evaluar las acciones de una empresa dada
   */
-valorize = require('./valorization');
+valorizeLocal = require('./valorizationLocal');
+valorizeRemote = require('./valorizationRemote');
 
+//TODO diferenciar casos CSV y YAHOO
 ipc.on("valorize", (event, args) => {
-  valorize(args["action_code"], args["action_name"]);
+  console.log("Antes");
+  valorizeLocal(args["action_code"], args["action_name"]);
+  console.log("Después");
 });
