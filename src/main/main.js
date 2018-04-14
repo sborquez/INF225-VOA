@@ -5,6 +5,8 @@ const url = require('url');
 const rendererDir = path.join(__dirname, '../renderer');
 
 const app = electron.app;
+const ipc = electron.ipcMain;
+
 const BrowserWindow = electron.BrowserWindow;
 let mainWindow
 
@@ -17,7 +19,7 @@ function createWindow () {
     slashes: true
   }))
 
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', function () {
     mainWindow = null
@@ -37,3 +39,9 @@ app.on('activate', function () {
     createWindow()
   }
 })
+
+valorize = require('./valorization');
+
+ipc.on("valorize", (event, args) => {
+  valorize(args["action_code"], args["action_name"]);
+});

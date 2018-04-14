@@ -5,13 +5,15 @@
     <title>Hello World!</title>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-
+    <form id="main_form">
+      <label>Nombre de la Acción: </label>
+      <input name="action_name" type="text" placeholder="...">
+      <label>Código de la Acción: </label>
+      <input name="action_code" type="text" placeholder="...">
+      <button type="button" id="main_submit">Valorizar</button>
+    </form>
     <script>
-      require('../js/renderer')
+      require("../js/renderer");
     </script>
   </body>
 </html>

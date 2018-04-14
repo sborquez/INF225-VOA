@@ -1,3 +1,13 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
+const ipc = require('electron').ipcRenderer;
+const $ = require('./jquery-3.3.1.min');
+
+$('#main_submit').on("click", () => {
+  const formData = $('form').serializeArray();
+  const args = {}
+
+  for (let i = 0; i < formData.length; i++) {
+    args[formData[i]["name"]] = formData[i]["value"];
+  }
+
+  ipc.send('valorize', args);
+});
