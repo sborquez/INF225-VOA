@@ -57,6 +57,10 @@ def main():
             #exit(101) TODO
     else:
         # Evaluar
+        print("STATUS", "Cargado", args["csv"], sep="\t")
+        filename = valoriser.generatePlot()
+        print("STATUS", "Grafico generado", filename, sep="\t")
+
         print("STATUS", "Comenzando a simulacion", None, sep="\t")
         # TEST
         value = valoriser.dummy_eval()

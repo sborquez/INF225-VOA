@@ -65,6 +65,7 @@ getCompaniesSymbols = require('./companies/companies');
 //TODO diferenciar casos CSV y YAHOO
 ipc.on("valorize", (event, args) => {
   console.log("Llamando a script");
+  console.log("Argumentos",args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
   valorizeLocal(args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
 });
 

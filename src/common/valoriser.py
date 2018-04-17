@@ -1,5 +1,9 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import datetime
 
+
+TEMP_DATA_PATH="./"
 
 class Valoriser(object):
     """
@@ -9,6 +13,7 @@ class Valoriser(object):
 
     def __init__(self):
         self.__loaded = False
+        self.data = None
 
     def download(self, name, code, period, downloadPath):
         """
@@ -54,6 +59,35 @@ class Valoriser(object):
         #TODO
         pass
 
+    def generatePlot(self):
+        """
+        generatePlot crea un plot de los datos cargados, guarda la imagen en una carpeta predeterminada.
+        """
+        if not self.isLoaded:
+            return
+
+        data = self.data
+
+        plt.figure(figsize=(20,10))
+
+        # Close
+        plt.plot(data["Date"],data["Close"], "g", linewidth=5)
+        # High y Low
+        plt.plot(data["Date"], data["High"], "r--", data["Low"], "b--", linewidth=2)
+        
+
+        # Formatear ejes #TODO
+        #ax.yaxis.set_major_formatter(mticker.FormatStrFormatter('$%1.2f'))
+        #ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))
+        plt.gcf().autofmt_xdate()
+        plt.grid()
+        plt.legend(["Close", "High", "Low"])
+
+        filename = TEMP_DATA_PATH + "plot_" + datetime.datetime.now().strftime("%y%m%d_%H%M%S") + ".png"
+        plt.savefig(filename)
+        return filename
+
+
     def eval(self):
         # This one is spooky
         """
@@ -61,10 +95,10 @@ class Valoriser(object):
         """
         #TODO
         pass
-    
+
     #TEST
     def dummy_eval(self):
         """
         dummy_eval realiza un cálculo simple sobre los datos.
         """
-        return self.data["compra"].mean()
+        return self.data["Close"].mean()
