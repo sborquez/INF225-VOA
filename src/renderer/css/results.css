@@ -6,7 +6,11 @@ body {
   display: grid;
 }
 
+h1 {
+  text-align: center;
+}
+
 img {
-  width: 80%;
+  width: 100%;
   height: auto;
 }
