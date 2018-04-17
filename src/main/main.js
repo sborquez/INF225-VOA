@@ -71,8 +71,8 @@ ipc.on("valorize local", (event, args) => {
 
 ipc.on("valorize remote", (event, args) => {
   console.log("Llamando a script");
-  let start = new Date(args["start"]).getTime();
-  let end = new Date(args["end"]).getTime();
+  let start = new Date(args["start"]).getTime() / 1000;
+  let end = new Date(args["end"]).getTime() / 1000;
   // console.log(start);
   // TODO cambiar path de descarga
   valorizeRemote("./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], start, end);
