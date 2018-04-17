@@ -50,7 +50,7 @@ def main():
     #TODO Descargar CSV
     if args["download_path"] != None:
         print("STATUS", "Comenzando descarga", args["name"])        
-        #args["csv"] =  valoriser.download(args["name"], args["code"], args["start"], args["end"], args["download_path"])
+        args["csv"] =  valoriser.download(args["name"], args["code"], args["start"], args["end"], args["download_path"])
         print("STATUS", "Descarga finalizada", args["csv"])        
 
     # Cargar CSV
