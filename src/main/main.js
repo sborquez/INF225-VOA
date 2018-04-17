@@ -70,11 +70,18 @@ ipc.on("valorize local", (event, args) => {
 });
 
 ipc.on("valorize remote", (event, args) => {
+<<<<<<< HEAD
   let start = new Date(args["start"]).getTime();
   let end = new Date(args["end"]).getTime();
   
   console.log("Llamando a script");
   console.log("Argumentos","./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], start, end);  
+=======
+  console.log("Llamando a script");
+  let start = new Date(args["start"]).getTime() / 1000;
+  let end = new Date(args["end"]).getTime() / 1000;
+  // console.log(start);
+>>>>>>> c93c9b6d9b5961cbfe4986fe7b2198ff425b887d
   // TODO cambiar path de descarga
   valorizeRemote("./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], start, end);
 });
