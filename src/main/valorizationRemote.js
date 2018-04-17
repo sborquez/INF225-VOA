@@ -8,13 +8,13 @@ const PythonShell = require("python-shell");
  * para ir mostrando el avance al usuario
  */
 
-function valorizeFromCloud(action_code, action_name)
+function valorizeFromCloud(download_path, action_code, action_name, r_value, option_type, start, end)
 {
   const options = {
     mode: "text",
     scriptPath: path.join(__dirname, "../common"),
     pythonOptions: ['-u'],
-    args: [action_code, action_name]
+    args: ["--download_path=" + download_path, "--code=" + action_code, "--name="+action_name, "--r="+r_value, "--type="+option_type, "--start="+start, "--end="+end]    
   }
   var shell =  new PythonShell('calculate.py', options)
 

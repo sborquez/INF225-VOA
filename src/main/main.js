@@ -67,6 +67,9 @@ ipc.on("valorize", (event, args) => {
   console.log("Llamando a script");
   console.log("Argumentos",args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
   valorizeLocal(args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
+
+  // TODO cambiar path de descarga
+  //valorizeRemote("./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], args=["start"], args=["end"])
 });
 
 ipc.on("companies", (event, args) => {
