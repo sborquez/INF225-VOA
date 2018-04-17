@@ -10,7 +10,8 @@ def parseArgs(args):
         "code"  : None,
         "r": None,
         "type": None,
-        "period": 1 #one year #TODO cambia para el perido pedido por usario
+        "start": None,
+        "end":  None #one year #TODO cambia para el perido pedido por usario
         }
     for arg in args:
         if arg.startswith("--csv="):
@@ -19,14 +20,21 @@ def parseArgs(args):
             new_args["code"] = arg.split("--code=")[1]
         elif arg.startswith("--name="):
             new_args["name"] = arg.split("--name=")[1]
-        elif arg.startswith("--name="):
+        elif arg.startswith("--r="):
             new_args["r"] = arg.split("--r=")[1]
         elif arg.startswith("--type="):
             new_args["type"] = arg.split("--type=")[1]
+        elif arg.startswith("--start="):
+            new_args["start"] = arg.split("--start=")[1]
+        elif arg.startswith("--end="):
+            new_args["end"] = arg.split("--end=")[1]
+        elif arg.startswith("--download_path="):
+            new_args["download_path"] = arg.split("--download_path=")[1]
         #TODO agregar otros argumentos para la descarga, numero de simulaciones,...
     return new_args
 
 def validateArgs(args):
+    #TODO validar argumetos, retornar error
     return None
 
 def main():
@@ -41,7 +49,7 @@ def main():
 
     #TODO Descargar CSV
     #if args["download_path"] != None:
-    #    args["csv"] =  valoriser.download(args["name"], args["code"], args["period"], args["download_path"])
+    #    args["csv"] =  valoriser.download(args["name"], args["code"], args["start"], args["end"], args["download_path"])
 
     # Cargar CSV
     print("STATUS", "Cargando CSV", args["csv"])
