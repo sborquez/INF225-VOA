@@ -63,13 +63,19 @@ valorizeRemote = require('./valorizationRemote');
 getCompaniesSymbols = require('./companies/companies');
 
 //TODO diferenciar casos CSV y YAHOO
-ipc.on("valorize", (event, args) => {
+ipc.on("valorize local", (event, args) => {
   console.log("Llamando a script");
   console.log("Argumentos",args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
   valorizeLocal(event, mainWindow, args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
+});
 
+ipc.on("valorize remote", (event, args) => {
+  console.log("Llamando a script");
+  let start = new Date(args["start"]).getTime();
+  let end = new Date(args["end"]).getTime();
+  // console.log(start);
   // TODO cambiar path de descarga
-  //valorizeRemote("./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], args=["start"], args=["end"])
+  valorizeRemote("./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], start, end);
 });
 
 ipc.on("companies", (event, args) => {

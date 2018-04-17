@@ -26,10 +26,15 @@
           <option value="europea">Europea</option>
           <option value="americana">Americana</option>
         </select>
+        <label>Inicio:</label>
+        <input name="start" type="date">
+        <label>Fin:</label>
+        <input name="end" type="date">
         <label>Ruta del archivo csv: </label>
         <button type="button" id="file_submit">Elegir archivo...</button>
         <input id="data_input" name="filepath_data" type="hidden">
-        <button type="button" id="main_submit">Valorizar</button>
+        <button type="button" id="local_submit">Valorizar Archivo</button>
+        <button type="button" id="remote_submit">Valorizar de Internet</button>
       </form>
     </div>
     <script>

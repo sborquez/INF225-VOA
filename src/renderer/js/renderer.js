@@ -11,8 +11,7 @@ function valorizeForm() {
   for (let i = 0; i < formData.length; i++) {
     args[formData[i]["name"]] = formData[i]["value"];
   }
-
-  ipc.send('valorize', args);
+  return args;
 }
 
 function openFile () {
@@ -33,7 +32,14 @@ function reloadCompanies()
   ipc.send('companies');
 }
 
-$('#main_submit').on("click", valorizeForm);
+$('#local_submit').on("click", () => {
+  ipc.send('valorize local', valorizeForm());
+});
+
+$('#remote_submit').on("click", () => {
+  ipc.send('valorize remote', valorizeForm());
+});
+
 $("#file_submit").on("click", openFile);
 $(document).ready(reloadCompanies);
 
