@@ -10,6 +10,11 @@ body {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+#companies {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
 #companies_table {
   width: 100%;
 }

@@ -20,6 +20,14 @@ function reloadCompanies()
 $(document).ready(reloadCompanies);
 
 ipc.on('companies_ready', (event, symbols_json) => {
-  console.log(symbols_json);
   const symbols = JSON.parse(symbols_json);
+  console.log(symbols);
+
+  const table = $('#companies_table tr');
+  table.not(':first').remove();
+  let html = '';
+  for(let sym in symbols)
+            html += '<tr><td>' + sym + 
+                    '</td><td>' + symbols[sym] + '</td></tr>';
+  table.first().after(html);
 })
