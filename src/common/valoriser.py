@@ -32,9 +32,9 @@ class Valoriser(object):
             self.__loaded = True
         except Exception:
             if csv_filepath == "":
-                print("ERROR", "Ruta a CSV vacia", None)
+                print("ERROR", "Ruta a CSV vacia", None, sep="\t")
             else:    
-                print("ERROR", "CSV no encontrado", csv_filepath)
+                print("ERROR", "CSV no encontrado", csv_filepath, sep="\t")
 
     def isValidData(self):
         """

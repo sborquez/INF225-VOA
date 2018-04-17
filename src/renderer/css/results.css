@@ -1,0 +1,12 @@
+html {
+  width: 100%;
+}
+
+body {
+  display: grid;
+}
+
+img {
+  width: 80%;
+  height: auto;
+}
