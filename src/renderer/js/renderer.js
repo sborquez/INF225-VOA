@@ -11,3 +11,15 @@ $('#main_submit').on("click", () => {
 
   ipc.send('valorize', args);
 });
+
+function reloadCompanies()
+{
+  ipc.send('companies');
+}
+
+$(document).ready(reloadCompanies);
+
+ipc.on('companies_ready', (event, symbols_json) => {
+  console.log(symbols_json);
+  const symbols = JSON.parse(symbols_json);
+})
