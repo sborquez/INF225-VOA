@@ -81,7 +81,10 @@ class Valoriser(object):
         #ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))
         plt.gcf().autofmt_xdate()
         plt.grid()
-        plt.legend(["Close", "High", "Low"])
+        plt.ylabel('Valor $',  fontsize=24)
+        plt.legend(["Close", "High", "Low"], prop={'size': 24})
+
+        plt.tick_params(axis='both', which='major', labelsize=25)
 
         filename = TEMP_DATA_PATH + "plot_" + datetime.datetime.now().strftime("%y%m%d_%H%M%S") + ".png"
         plt.savefig(filename)
