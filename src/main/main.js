@@ -15,7 +15,12 @@ const BrowserWindow = electron.BrowserWindow;
 let mainWindow                  // ventana principal
 
 function createWindow () {
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    title: "Valorización de Opciones",
+    resizable: false
+  })
 
   mainWindow.loadURL(url.format({
     pathname: path.join(rendererDir, 'html/index.html'),
@@ -23,7 +28,7 @@ function createWindow () {
     slashes: true
   }))
 
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', function () {
     mainWindow = null
