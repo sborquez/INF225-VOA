@@ -23,7 +23,7 @@ function openFile () {
   if (fileNames === undefined) return;
 
   var fileName = fileNames[0];
-  $('#input_data').value = fileName;
+  $('#input_data').val(fileName);
   $('#file_submit').html(fileName);
  }); 
 }
