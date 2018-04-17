@@ -22,9 +22,13 @@
         <label>r: </label>
         <input name="r_value" type="text" placeholder="el r de la formula">
         <label>Tipo: </label>
-        <input name="option_type" type="text" placeholder="europea">
+        <select name="option_type">
+          <option value="europea">Europea</option>
+          <option value="americana">Americana</option>
+        </select>
         <label>Ruta del archivo csv: </label>
-        <input name="filepath_data" type="text" placeholder="/test/data/fragmentos.csv">
+        <button type="button" id="file_submit">Elegir archivo...</button>
+        <input id="data_input" name="filepath_data" type="hidden">
         <button type="button" id="main_submit">Valorizar</button>
       </form>
     </div>
