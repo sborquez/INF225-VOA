@@ -25,7 +25,7 @@ function valorizeFromCloud(download_path, action_code, action_name, r_value, opt
      * TODO
      * debera tener un formato predefinido por nosotros 
      */ 
-    console.log("Recibido desde python: " + message);
+    console.log("[python]: " + message);
   });
 
   shell.end(function (err,code,signal) {

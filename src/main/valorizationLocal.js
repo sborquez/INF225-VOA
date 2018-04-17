@@ -28,6 +28,7 @@ function valorizeFromCSV(event, win, csv_path, action_code, action_name, r_value
      * TODO
      * debera tener un formato predefinido por nosotros 
      */
+    console.log("[python]: " + message);
     const parsed = message.split("\t");
 
     if (parsed[0].localeCompare("STATUS") == 0) {
