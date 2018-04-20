@@ -180,9 +180,9 @@ class Valoriser(object):
         eval realiza el cálculo sobre los datos.
         """
         #TODO
-
         volatility = self.data["Close"].std()
         
+        return volatility
 
     #TEST
     def dummy_eval(self):

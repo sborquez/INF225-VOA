@@ -74,7 +74,7 @@ def main():
         # Variables del calculo
         r = args["r"]
         option = args["type"]
-        print("STATUS", "Variables de simulacion", [r, option], sep="\t")
+        print("STATUS", "Variables de simulacion", (r, option), sep="\t")
         print("STATUS", "Comenzando a simulacion", None, sep="\t")
         
         value = valoriser.eval(r, option)
