@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import datetime
 import urllib
 import csv
+import QuantLib as ql
 
 TEMP_DATA_PATH="./"
 
@@ -167,24 +168,25 @@ class Valoriser(object):
         plt.ylabel('Valor $',  fontsize=24)
         plt.legend(["Close", "High", "Low"], prop={'size': 24})
 
-        plt.tick_params(axis='both', which='major', labelsize=25)
+        plt.tick_params(axis='both', which='major', labelsize=22)
 
         filename = TEMP_DATA_PATH + "plot_" + datetime.datetime.now().strftime("%y%m%d_%H%M%S") + ".png"
         plt.savefig(filename)
         return filename
 
 
-    def eval(self):
-        # This one is spooky
+    def eval(self, r, optionType):
         """
         eval realiza el cálculo sobre los datos.
         """
         #TODO
-        pass
+
+        volatility = self.data["Close"].std()
+        
 
     #TEST
     def dummy_eval(self):
         """
         dummy_eval realiza un cálculo simple sobre los datos.
         """
-        return self.data["Close"].mean()
+        return self.data["Close"].std()

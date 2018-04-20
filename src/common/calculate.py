@@ -71,9 +71,13 @@ def main():
         filename = valoriser.generatePlot()
         print("STATUS", "Grafico generado", filename, sep="\t")
 
+        # Variables del calculo
+        r = args["r"]
+        option = args["type"]
+        print("STATUS", "Variables de simulacion", [r, option], sep="\t")
         print("STATUS", "Comenzando a simulacion", None, sep="\t")
-        # TEST
-        value = valoriser.dummy_eval()
+        
+        value = valoriser.eval(r, option)
         print("STATUS", "Simulacion terminada", value, sep="\t")
         print("RESULT", value, sep="\t")
 

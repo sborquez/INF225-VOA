@@ -4,6 +4,10 @@
 
 * Node.js
 * Node Package Manager (NPM)
+* Python 3
+* conda (for development)
+* QuantLib Python Module
+* Pandas
 
 ## Uso
 
