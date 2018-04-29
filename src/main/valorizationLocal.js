@@ -1,46 +1,32 @@
 const path = require('path');
-const PythonShell = require("python-shell");
+const PythonCall = require('./utils/pythonProtocol');
 
 const rendererDir = path.join(__dirname, '../renderer');
 
-function valorizeFromCSV(event, win, csv_path, action_code, action_name, r_value, option_type)
-{
-  const options = {
-    mode: "text",
-    scriptPath: path.join(__dirname, "../common"),
-    pythonOptions: ['-u'],
-    args: ["--csv=" + csv_path, "--code=" + action_code, "--name="+action_name, "--r="+r_value, "--type="+option_type]
+function valorizeFromCSV(event, win, csv_path, action_code, action_name, r_value, option_type) {
+  const args = {
+    csv: csv_path,
+    code: action_code,
+    name: action_name,
+    r: r_value,
+    type: option_type
   }
 
-  var shell =  new PythonShell('calculate.py', options)
+  const call = new PythonCall("calculate.py", args);
+
+  call.onStatus("loaded", () => {
+    win.loadURL(path.join(rendererDir, 'html/results.html'));
+  })
 
   let plot_path;
 
-  shell.on('message', function (message) {
-    console.log("[python]: " + message);
-    const parsed = message.split("\t");
+  call.onStatus("plot generated", (rel_plot_path) => {
+    plot_path = path.join(__dirname, "./../../", rel_plot_path)
+    event.sender.send("plot generated", plot_path);
+    event.sender.send("csv loaded", csv_path);
+  })
 
-    if (parsed[0].localeCompare("STATUS") == 0) {
-      if (parsed[1].localeCompare("loaded") == 0) {
-        win.loadURL(path.join(rendererDir, 'html/results.html'));
-      } else if (parsed[1].localeCompare("plot generated") == 0) {
-        plot_path = path.join(__dirname, "./../../", parsed[2])
-        event.sender.send("plot generated", plot_path);
-        event.sender.send("csv loaded", csv_path);
-      } else {
-        console.log(parsed[1]);
-      }
-    } else if (parsed[0].localeCompare("ERROR") == 0) {
-      console.error(parsed[1]);
-    }
-  });
-
-  shell.end(function (err,code,signal) {
-    if (err) throw err;
-    console.log('exit code was: ' + code);
-    console.log('exit signal was: ' + signal);
-    console.log('finished');
-  });
+  call.start();
 }
-module.exports = valorizeFromCSV;
 
+module.exports = valorizeFromCSV;
