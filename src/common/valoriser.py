@@ -18,29 +18,28 @@ class Valoriser(object):
 
     def download(self, name, code, start, end, downloadPath):
         """
-        download toma los argumentos y descarga desde la página de Yahoo
-        los datos correspondientes, los guarda en un el path dado y luego
-        retorna la ruta de csv creado.
+        download take arguments and download from Yahoo! the data, save
+        them in the given path and returns the csv route.
         """
         cookier = urllib.request.HTTPCookieProcessor()
         opener = urllib.request.build_opener(cookier)
         urllib.request.install_opener(opener)
 
-        # Cookie and corresponding crumb
+        # cookie and corresponding crumb
         _cookie = None
         _crumb = None
 
-        # Headers to fake a user agent
+        # headers to fake a user agent
         _headers={
             'User-Agent': 'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11'
         }
 
-        # Perform a Yahoo financial lookup on SP500
+        # perform a Yahoo financial lookup on SP500
         req = urllib.request.Request('https://finance.yahoo.com/quote/^GSPC', headers=_headers)
         f = urllib.request.urlopen(req)
         alines = f.read().decode('utf-8')
 
-        # Extract the crumb from the response
+        # extract the crumb from the response
         cs = alines.find('CrumbStore')
         cr = alines.find('crumb', cs + 10)
         cl = alines.find(':', cr + 5)
@@ -48,7 +47,7 @@ class Valoriser(object):
         q2 = alines.find('"', q1 + 1)
         _crumb = alines[q1 + 1:q2]
 
-        # Extract the cookie from cookiejar
+        # extract the cookie from cookiejar
 
         for c in cookier.cookiejar:
             if c.domain != '.yahoo.com':
@@ -57,10 +56,10 @@ class Valoriser(object):
                 continue
             _cookie = c.value
 
-        # Print the cookie and crumb
+        # print the cookie and crumb
         #print('Cookie:', _cookie)
         #print('Crumb:', _crumb)
-        # Prepare the parameters and the URL
+        # prepare the parameters and the URL
 
         param = dict()
         param['period1'] = int(start)
@@ -72,8 +71,8 @@ class Valoriser(object):
         url = 'https://query1.finance.yahoo.com/v7/finance/download/{}?{}'.format(code, params)
         req = urllib.request.Request(url, headers=_headers)
 
-            # Perform the query
-            # There is no need to enter the cookie here, as it is automatically handled by opener
+            # perform the query
+            # there is no need to enter the cookie here, as it is automatically handled by opener
             #Agregado try y except debido a error 401 ocasional
         try:
             f = urllib.request.urlopen(req)
@@ -95,9 +94,9 @@ class Valoriser(object):
         alines = f.read().decode('utf-8')
             #print(alines)
         holder = alines.split('\n')
-            #Se genera el nombre del csv con la sigla y fechas indicada
+            # generates csv filename
         filename = downloadPath + code + end + '.csv'
-            #Se crea el csv
+            # creates csv
         with open(filename, 'w') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -124,7 +123,7 @@ class Valoriser(object):
         isValidData verifica la integridad de los datos en el CSV, si son válidos para el cálculo.
         """
         if self.__loaded:
-            #TODO revisar los datos
+            #TODO check data
             return True
         else:
             return False
@@ -153,13 +152,13 @@ class Valoriser(object):
 
         plt.figure(figsize=(20,10))
 
-        # Close
+        # close
         plt.plot(data["Date"],data["Close"], "g", linewidth=5)
-        # High y Low
+        # high and low
         plt.plot(data["Date"], data["High"], "r--", data["Low"], "b--", linewidth=2)
         
 
-        # Formatear ejes #TODO
+        # format axes #TODO
         #ax.yaxis.set_major_formatter(mticker.FormatStrFormatter('$%1.2f'))
         #ax.xaxis.set_major_formatter(mdates.DateFormatter('%d'))
         plt.gcf().autofmt_xdate()
@@ -175,9 +174,9 @@ class Valoriser(object):
 
 
     def eval(self):
-        # This one is spooky
+        # this one is spooky
         """
-        eval realiza el cálculo sobre los datos.
+        eval calculate over data
         """
         #TODO
         pass
@@ -185,6 +184,6 @@ class Valoriser(object):
     #TEST
     def dummy_eval(self):
         """
-        dummy_eval realiza un cálculo simple sobre los datos.
+        dummy_eval do simple calculations over data
         """
         return self.data["Close"].mean()

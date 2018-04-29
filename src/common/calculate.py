@@ -11,7 +11,7 @@ def parseArgs(args):
         "r": None,
         "type": None,
         "start": None,
-        "end":  None #one year #TODO cambia para el perido pedido por usario
+        "end":  None #one year #TODO change for user-defined period
         }
     for arg in args:
         if arg.startswith("--csv="):
@@ -30,11 +30,11 @@ def parseArgs(args):
             new_args["end"] = arg.split("--end=")[1]
         elif arg.startswith("--download_path="):
             new_args["download_path"] = arg.split("--download_path=")[1]
-        #TODO agregar otros argumentos para la descarga, numero de simulaciones,...
+        #TODO add other arguments for download, number of simulations...
     return new_args
 
 def validateArgs(args):
-    #TODO validar argumetos, retornar error
+    #TODO validate arguments, return error
     return None
 
 def main():
@@ -44,16 +44,16 @@ def main():
         print("ERROR","argumentos invalidos", err, sep="\t")
         return exit(1)
 
-    # Hacer diferentes cosas segun los argumentos dados
+    # do different things according given arguments
     valoriser = Valoriser()
 
-    #TODO Descargar CSV
+    #TODO download csv
     if args["download_path"] != None:
         print("STATUS", "Comenzando descarga", args["name"])        
         args["csv"] =  valoriser.download(args["name"], args["code"], args["start"], args["end"], args["download_path"])
         print("STATUS", "Descarga finalizada", args["csv"])        
 
-    # Cargar CSV
+    # load csv
     print("STATUS", "Cargando CSV", args["csv"])
     valoriser.load(args["csv"])
     if not valoriser.isLoaded():
@@ -66,7 +66,7 @@ def main():
             print("ERROR", "Formato del CSV invalido", args["csv"], sep="\t")
             #exit(101) TODO
     else:
-        # Evaluar
+        # evaluate
         print("STATUS", "Cargado", args["csv"], sep="\t")
         filename = valoriser.generatePlot()
         print("STATUS", "Grafico generado", filename, sep="\t")
