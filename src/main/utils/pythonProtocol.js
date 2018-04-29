@@ -25,16 +25,22 @@ function logpythonerror(message) {
 
 function parseMessage(message) {
   const splitted = message.split("\t");
-  const type = splitted[0].toLowerCase();
+  const typeName = splitted[0].toLowerCase();
 
-  if (!(type in messageType)) {
+  if (!(typeName in messageType)) {
     return null;
   }
 
-  const argument = (splitted[2] === "None") ? null : splitted[2];
+  const type = messageType[typeName];
+  let argument;
+
+  if (type == messageType.result)
+    argument = splitted[1];
+  else
+    argument = (splitted[2] === "None") ? null : splitted[2];
 
   const parsed = {
-    type: messageType[type],
+    type: type,
     message: splitted[1],
     argument: argument
   }
@@ -68,7 +74,7 @@ class PythonCall {
     this.__options = Object.assign({}, options);
     this.__options.args = parseArguments(args)
 
-    this.__result_callbacks = {};
+    this.result_callback = null;
     this.__status_callbacks = {};
     this.__error_callbacks = {};
   }
@@ -105,19 +111,26 @@ class PythonCall {
       callbackMessage(parsed.message, parsed.argument, this.__status_callbacks);
     } else if (parsed.type == messageType.result) {
       logpython(msg);
-      callbackMessage(parsed.message, parsed.argument, this.__result_callbacks);
+      if (this.__result_callback)
+        this.__result_callback(parsed.argument);
+      else
+        console.warn("not handled result: " + parsed.argument);
     } else if (parsed.type == messageType.error) {
       logpythonerror(msg);
       callbackMessage(parsed.message, parsed.argument, this.__error_callbacks);
     }
   }
 
-  onResult(msg, callback) {
-    this.__result_callbacks[msg] = callback;
+  onResult(callback) {
+    this.__result_callback = callback;
   }
 
   onStatus(msg, callback) {
     this.__status_callbacks[msg] = callback;
+  }
+
+  onError(msg, callback) {
+    this.__error_callbacks[msg] = callback;
   }
 }
 
