@@ -55,7 +55,7 @@ def main():
         log_status("download ended", args["csv"])
 
     # load csv
-    log_status("loading Csv", args["csv"])
+    log_status("loading csv", args["csv"])
     valoriser.load(args["csv"])
     if not valoriser.isLoaded():
         log_error("data not loaded")
