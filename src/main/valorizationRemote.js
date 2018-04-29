@@ -3,12 +3,6 @@ const PythonShell = require("python-shell");
 
 const rendererDir = path.join(__dirname, '../renderer');
 
-/* valorizeFromCloud debera definir los argumentos necesarios
- * para llamar al script de python para descargar y cargar desde una BD.
- * Luego, envia y recibe los mensajes de estado (STATUS) del script
- * para ir mostrando el avance al usuario
- */
-
 function valorizeFromCloud(event, win, download_path, action_code, action_name, r_value, option_type, start, end)
 {
   const options = {
@@ -27,10 +21,10 @@ function valorizeFromCloud(event, win, download_path, action_code, action_name, 
     let csv_path;
 
     if (parsed[0].localeCompare("STATUS") == 0) {
-      if (parsed[1].localeCompare("Cargado") == 0) {
+      if (parsed[1].localeCompare("loaded") == 0) {
         win.loadURL(path.join(rendererDir, 'html/results.html'));
         csv_path = path.join(__dirname, "./../../", parsed[2]);
-      } else if (parsed[1].localeCompare("Grafico generado") == 0) {
+      } else if (parsed[1].localeCompare("plot generated") == 0) {
         plot_path = path.join(__dirname, "./../../", parsed[2]);
         event.sender.send("plot generated", plot_path);
         event.sender.send("csv loaded", csv_path);
@@ -43,10 +37,9 @@ function valorizeFromCloud(event, win, download_path, action_code, action_name, 
   });
 
   shell.end(function (err,code,signal) {
-    // Esto ocurre al finalizar el script de python
     if (err) throw err;
-    console.log('The exit code was: ' + code);
-    console.log('The exit signal was: ' + signal);
+    console.log('exit code was: ' + code);
+    console.log('exit signal was: ' + signal);
     console.log('finished');
   });
 }

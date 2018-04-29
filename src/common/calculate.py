@@ -41,7 +41,7 @@ def main():
     args = parseArgs(sys.argv[1:])
     err = validateArgs(args)
     if err is not None:
-        print("ERROR","argumentos invalidos", err, sep="\t")
+        print("ERROR","invalid arguments", err, sep="\t")
         return exit(1)
 
     # do different things according given arguments
@@ -49,32 +49,32 @@ def main():
 
     #TODO download csv
     if args["download_path"] != None:
-        print("STATUS", "Comenzando descarga", args["name"])        
+        print("STATUS", "starting download", args["name"])        
         args["csv"] =  valoriser.download(args["name"], args["code"], args["start"], args["end"], args["download_path"])
-        print("STATUS", "Descarga finalizada", args["csv"])        
+        print("STATUS", "download ended", args["csv"])        
 
     # load csv
-    print("STATUS", "Cargando CSV", args["csv"])
+    print("STATUS", "loading Csv", args["csv"])
     valoriser.load(args["csv"])
     if not valoriser.isLoaded():
-        print("ERROR", "Datos no cargados", None)
+        print("ERROR", "data not loaded", None)
         #exit(100)  TODO
     elif not valoriser.isValidData():
-        print("STATUS", "Limpiando datos", None)    
+        print("STATUS", "cleaning data", None)    
         fixed = valoriser.cleanData()
         if not fixed:
-            print("ERROR", "Formato del CSV invalido", args["csv"], sep="\t")
+            print("ERROR", "invalid csv format", args["csv"], sep="\t")
             #exit(101) TODO
     else:
         # evaluate
-        print("STATUS", "Cargado", args["csv"], sep="\t")
+        print("STATUS", "loaded", args["csv"], sep="\t")
         filename = valoriser.generatePlot()
-        print("STATUS", "Grafico generado", filename, sep="\t")
+        print("STATUS", "plot generated", filename, sep="\t")
 
-        print("STATUS", "Comenzando a simulacion", None, sep="\t")
+        print("STATUS", "starting simulation", None, sep="\t")
         # TEST
         value = valoriser.dummy_eval()
-        print("STATUS", "Simulacion terminada", value, sep="\t")
+        print("STATUS", "simulation ended", value, sep="\t")
         print("RESULT", value, sep="\t")
 
         sys.stdout.flush()

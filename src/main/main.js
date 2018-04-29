@@ -3,16 +3,16 @@ const path = require('path');
 const url = require('url');
 
 /*
- * Código básico para una aplicación de electron  
+ * electron initialization
  */
 
 const rendererDir = path.join(__dirname, '../renderer');
 
-const app = electron.app;       // aplicacion
+const app = electron.app;
 const ipc = electron.ipcMain;
 
 const BrowserWindow = electron.BrowserWindow;
-let mainWindow                  // ventana principal
+let mainWindow
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -51,21 +51,16 @@ app.on('activate', function () {
 
 
 /*
- * Funcionalidades de nuestra aplicación
- */
+ * application functionality
+*/
 
- /* valorize
-  * Llama a un script de python ubicado en /common/calculate.py
-  * Se encarga de descargar y evaluar las acciones de una empresa dada
-  */
 valorizeLocal = require('./valorizationLocal');
 valorizeRemote = require('./valorizationRemote');
 getCompaniesSymbols = require('./companies/companies');
 
-//TODO diferenciar casos CSV y YAHOO
 ipc.on("valorize local", (event, args) => {
-  console.log("Llamando a script");
-  console.log("Argumentos",args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
+  console.log("calling local valorize script");
+  console.log("arguments",args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
   valorizeLocal(event, mainWindow, args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
 });
 
@@ -73,10 +68,10 @@ ipc.on("valorize remote", (event, args) => {
   let start = new Date(args["start"]).getTime() / 1000;
   let end = new Date(args["end"]).getTime() / 1000;
   
-  console.log("Llamando a script");
-  console.log("Argumentos","./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], start, end);  
+  console.log("calling remote valorize script");
+  console.log("arguments","./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], start, end);  
   
-  // TODO cambiar path de descarga
+  // TODO change download path
   valorizeRemote(event, mainWindow, "./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], start, end);
 });
 

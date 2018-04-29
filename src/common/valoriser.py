@@ -73,7 +73,6 @@ class Valoriser(object):
 
             # perform the query
             # there is no need to enter the cookie here, as it is automatically handled by opener
-            #Agregado try y except debido a error 401 ocasional
         try:
             f = urllib.request.urlopen(req)
         except urllib.error.URLError as e:
@@ -114,13 +113,13 @@ class Valoriser(object):
             self.__loaded = True
         except Exception:
             if csv_filepath == "":
-                print("ERROR", "Ruta a CSV vacia", None, sep="\t")
+                print("ERROR", "csv path empty", None, sep="\t")
             else:    
-                print("ERROR", "CSV no encontrado", csv_filepath, sep="\t")
+                print("ERROR", "csv not found", csv_filepath, sep="\t")
 
     def isValidData(self):
         """
-        isValidData verifica la integridad de los datos en el CSV, si son válidos para el cálculo.
+        isValidData verifies data integrity in csv, if valid use them for calculations.
         """
         if self.__loaded:
             #TODO check data
@@ -130,20 +129,20 @@ class Valoriser(object):
 
     def isLoaded(self):
         """
-        isLoaded verifica si hay datos cargados.
+        isLoaded verifies if there are loaded data
         """
         return self.__loaded
 
     def cleanData(self):
         """ 
-        cleanData elimina cualquier incongruencia en los datos.
+        cleanData removes incongruencies in data
         """
         #TODO
         pass
 
     def generatePlot(self):
         """
-        generatePlot crea un plot de los datos cargados, guarda la imagen en una carpeta predeterminada.
+        generatePlot plots loaded data, saves image in predefines path
         """
         if not self.isLoaded:
             return
