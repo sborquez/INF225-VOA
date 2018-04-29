@@ -105,7 +105,7 @@ class Valoriser(object):
 
     def load(self, csv_filepath):
         """
-        load lee un archivo de csv y lo carga para un analisis posterior
+        load loads and reads csv file
         """
         try:
             self.data = pd.read_csv(csv_filepath)
