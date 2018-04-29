@@ -4,6 +4,8 @@ import datetime
 import urllib
 import csv
 
+from utils import log_error, log_result, log_status
+
 TEMP_DATA_PATH="./"
 
 class Valoriser(object):
@@ -112,9 +114,9 @@ class Valoriser(object):
             self.__loaded = True
         except Exception:
             if csv_filepath == "":
-                print("ERROR", "csv path empty", None, sep="\t")
+                log_error("csv path empty")
             else:    
-                print("ERROR", "csv not found", csv_filepath, sep="\t")
+                log_error("csv not found", csv_filepath)
 
     def isValidData(self):
         """
