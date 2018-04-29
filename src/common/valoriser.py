@@ -8,8 +8,7 @@ TEMP_DATA_PATH="./"
 
 class Valoriser(object):
     """
-    Valoriser se encarga de obtener los datos desde fuentes externas o locales
-    sanitisarlos y luego efectuar el calculo sobre ellos.
+    Valoriser get local or remote data, clean it and calculate over it
     """
 
     def __init__(self):
