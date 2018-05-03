@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 import urllib
@@ -8,6 +9,7 @@ from protocol import Protocol
 
 TEMP_DATA_PATH="./"
 
+
 class Prices(object):
     """
     Prices gets local or remote data, clean it and gets some statistic from the data.
@@ -16,6 +18,8 @@ class Prices(object):
     def __init__(self):
         self.__loaded = False
         self.data = None
+        self._volatility = None
+        #self.roll_volatility = None
 
     def download(self, name, code, start, end, downloadPath):
         """
@@ -178,5 +182,26 @@ class Prices(object):
     def getVolatility(self):
         """
         getVolatility evaluate data and retrives its volatility
+
+        This method was taken from 'A Review of Volatility and Option Pricing' by Sovan Mitra, Section 3.2
+
+        We can calculate the historical volatility (or sigma) of prices X using
+
+        sigma = sqrt(Vx)/sqrt(dt)
+
+        where
+        Vx is the sample variance 
+            Vx = 1/(n-1) * SUM(Xi - MEAN(X))
+
+        Xi is calculated in all steps
+            Xi = ln(X(t_{i})/ X(t_{i-1}))
+
+        dt is the interval between to samples, we use one day
+            dt = 1 day
+
+        X(t_{i}) is a sample price.
         """
-        return self.data["Close"].std()
+        if self._volatility == None:
+            X = self.data["Close"]
+            self._volatility = np.diff(np.log(X)).std() 
+        return self._volatility
