@@ -4,6 +4,8 @@ from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 from bs4 import BeautifulSoup
 
+from protocol import Protocol
+
 def requests_retry_session(retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 504)):
     session = requests.Session()
     retry = Retry(
@@ -22,13 +24,14 @@ def get_symbols():
     most_active_url = "https://finance.yahoo.com/most-active?offset=0&count=200"
     session = requests_retry_session()
 
-    print("STATUS", "Trying to connect Yahoo! Finance", sep="\t")
+    Protocol.sendStatus("Trying to connect Yahoo! Finance")
+
     try:
         r = session.get(most_active_url)
     except Exception:
         return
     else:
-        print("STATUS", "Stablished connection", sep="\t")
+        Protocol.sendStatus("Stablished connection")
     
     soup = BeautifulSoup(r.content, "html5lib")
     table = soup.find("div", {"id": "scr-res-table"})
@@ -40,8 +43,12 @@ def get_symbols():
         symbols[col[0].text] = col[1].text
     return symbols
 
-symbols = get_symbols()
-if symbols is not None:
-    print("RESULT", json.dumps(symbols, ensure_ascii=False), sep="\t")
-else:
-    print("ERROR", "Couldn't connect to Yahoo! Finance", sep="\t")
+def main():
+    symbols = get_symbols()
+    if symbols is not None:
+        Protocol.sendResult(json.dumps(symbols, ensure_ascii=False))
+    else:
+        Protocol.sendError("Couldn't connect to Yahoo! Finance")
+
+if __name__ == '__main__':
+    main()

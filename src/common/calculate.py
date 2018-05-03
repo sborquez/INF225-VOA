@@ -1,6 +1,6 @@
 import sys
 from time import sleep
-from utils import log_error, log_result, log_status
+from protocol import Protocol
 from valoriser import Valoriser
 
 def parseArgs(args):
@@ -42,41 +42,40 @@ def main():
     args = parseArgs(sys.argv[1:])
     err = validateArgs(args)
     if err is not None:
-        log_error("invalid arguments", err)
+        Protocol.sendError("invalid arguments", err)
         return exit(1)
 
     # do different things according given arguments
     valoriser = Valoriser()
 
-    #TODO download csv
     if args["download_path"] != None:
-        log_status("starting download", args["name"])
+        Protocol.sendStatus("starting download", args["name"])
         args["csv"] =  valoriser.download(args["name"], args["code"], args["start"], args["end"], args["download_path"])
-        log_status("download ended", args["csv"])
+        Protocol.sendStatus("download ended", args["csv"])
 
     # load csv
-    log_status("loading csv", args["csv"])
+    Protocol.sendStatus("loading csv", args["csv"])
     valoriser.load(args["csv"])
     if not valoriser.isLoaded():
-        log_error("data not loaded")
+        Protocol.sendError("data not loaded")
         #exit(100)  TODO
     elif not valoriser.isValidData():
-        log_status("cleaning data")
+        Protocol.sendStatus("cleaning data")
         fixed = valoriser.cleanData()
         if not fixed:
-            log_error("invalid csv format", args["csv"])
+            Protocol.sendError("invalid csv format", args["csv"])
             #exit(101) TODO
     else:
         # evaluate
-        log_status("loaded", args["csv"])
+        Protocol.sendStatus("loaded", args["csv"])
         filename = valoriser.generatePlot()
-        log_status("plot generated", filename)
+        Protocol.sendStatus("plot generated", filename)
 
-        log_status("starting simulation")
+        Protocol.sendStatus("starting simulation")
         # TEST
         value = valoriser.dummy_eval()
-        log_status("simulation ended", value)
-        log_result(value)
+        Protocol.sendStatus("simulation ended", value)
+        Protocol.sendResult(value)
 
         sys.stdout.flush()
 

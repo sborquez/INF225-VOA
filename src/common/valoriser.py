@@ -4,7 +4,7 @@ import datetime
 import urllib
 import csv
 
-from utils import log_error, log_result, log_status
+from protocol import Protocol
 
 TEMP_DATA_PATH="./"
 
@@ -72,8 +72,8 @@ class Valoriser(object):
         url = 'https://query1.finance.yahoo.com/v7/finance/download/{}?{}'.format(code, params)
         req = urllib.request.Request(url, headers=_headers)
 
-            # perform the query
-            # there is no need to enter the cookie here, as it is automatically handled by opener
+        # perform the query
+        # there is no need to enter the cookie here, as it is automatically handled by opener
         try:
             f = urllib.request.urlopen(req)
         except urllib.error.URLError as e:
@@ -90,13 +90,16 @@ class Valoriser(object):
             print('HTTPError!!!')
             return False
 
-            #urlopen(req)
+        #urlopen(req)
         alines = f.read().decode('utf-8')
-            #print(alines)
+
+        #print(alines)
         holder = alines.split('\n')
-            # generates csv filename
+
+        # generates csv filename
         filename = downloadPath + code + end + '.csv'
-            # creates csv
+
+        # creates csv
         with open(filename, 'w') as csvfile:
             filewriter = csv.writer(csvfile, delimiter=',',
                                     quotechar='|', quoting=csv.QUOTE_MINIMAL)
@@ -114,9 +117,9 @@ class Valoriser(object):
             self.__loaded = True
         except Exception:
             if csv_filepath == "":
-                log_error("csv path empty")
+                Protocol.sendError("csv path empty")
             else:    
-                log_error("csv not found", csv_filepath)
+                Protocol.sendError("csv not found", csv_filepath)
 
     def isValidData(self):
         """

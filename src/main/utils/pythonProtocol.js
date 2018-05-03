@@ -92,9 +92,12 @@ class PythonCall {
 
       shell.end((err, code, signal) => {
         if (err) throw err;
-        console.log('python exit code was: ' + code);
-        console.log('python exit signal was: ' + signal);
-        console.log('python script finished');
+        if (code === 0) {
+          console.log('python script finished');
+        } else {
+          console.log('python exit code was: ' + code);
+          console.log('python exit signal was: ' + signal);  
+        }
       });
     }
   }
