@@ -1,7 +1,8 @@
 import sys
 from time import sleep
 from protocol import Protocol
-from valoriser import Valoriser
+from prices import Prices
+from options import EuropeanOptionPricing, AmericanOptionPricing
 
 def parseArgs(args):
     new_args = {
@@ -43,39 +44,53 @@ def main():
     err = validateArgs(args)
     if err is not None:
         Protocol.sendError("invalid arguments", err)
-        return exit(1)
+        exit(1)
 
-    # do different things according given arguments
-    valoriser = Valoriser()
+    # prices will get the company's data
+    prices = Prices()
 
+    # Enter only if we will pricing with remote data
     if args["download_path"] != None:
         Protocol.sendStatus("starting download", args["name"])
-        args["csv"] =  valoriser.download(args["name"], args["code"], args["start"], args["end"], args["download_path"])
+        # Use this CSV file in the load step.
+        args["csv"] =  prices.download(args["name"], args["code"], args["start"], args["end"], args["download_path"])
         Protocol.sendStatus("download ended", args["csv"])
 
-    # load csv
+    # Load a downloaded CSV file.
     Protocol.sendStatus("loading csv", args["csv"])
-    valoriser.load(args["csv"])
-    if not valoriser.isLoaded():
+    prices.load(args["csv"])
+
+    # Check if prices loaded the CSV correctly.
+    if not prices.isLoaded():
         Protocol.sendError("data not loaded")
         #exit(100)  TODO
-    elif not valoriser.isValidData():
+
+    # Check if data doesn't have any invalid value
+    elif not prices.isValidData():
         Protocol.sendStatus("cleaning data")
-        fixed = valoriser.cleanData()
+        # If there are any wrong value, try to fix it.
+        fixed = prices.cleanData()
+
+        # Otherwise, we can handle this data.
         if not fixed:
             Protocol.sendError("invalid csv format", args["csv"])
             #exit(101) TODO
+
+    # Data is valid and is ready to process.
     else:
-        # evaluate
         Protocol.sendStatus("loaded", args["csv"])
-        filename = valoriser.generatePlot()
+        
+        # Plot the prices
+        filename = prices.getPlot()
         Protocol.sendStatus("plot generated", filename)
 
+        # Here we will price the option
         Protocol.sendStatus("starting simulation")
-        # TEST
-        value = valoriser.dummy_eval()
-        Protocol.sendStatus("simulation ended", value)
-        Protocol.sendResult(value)
+        volatility = prices.getVolatility()
+        #value = prices.dummy_eval()
+        Protocol.sendStatus("simulation ended", volatility)
+        #Protocol.sendStatus("simulation ended", value)
+        Protocol.sendResult(volatility)
 
         sys.stdout.flush()
 

@@ -8,9 +8,9 @@ from protocol import Protocol
 
 TEMP_DATA_PATH="./"
 
-class Valoriser(object):
+class Prices(object):
     """
-    Valoriser get local or remote data, clean it and calculate over it
+    Prices gets local or remote data, clean it and gets some statistic from the data.
     """
 
     def __init__(self):
@@ -144,9 +144,9 @@ class Valoriser(object):
         #TODO
         pass
 
-    def generatePlot(self):
+    def getPlot(self):
         """
-        generatePlot plots loaded data, saves image in predefines path
+        getPlot plots loaded data, saves image in predefines path
         """
         if not self.isLoaded:
             return
@@ -174,19 +174,9 @@ class Valoriser(object):
         filename = TEMP_DATA_PATH + "plot_" + datetime.datetime.now().strftime("%y%m%d_%H%M%S") + ".png"
         plt.savefig(filename)
         return filename
-
-
-    def eval(self):
-        # this one is spooky
+    
+    def getVolatility(self):
         """
-        eval calculate over data
+        getVolatility evaluate data and retrives its volatility
         """
-        #TODO
-        pass
-
-    #TEST
-    def dummy_eval(self):
-        """
-        dummy_eval do simple calculations over data
-        """
-        return self.data["Close"].mean()
+        return self.data["Close"].std()
