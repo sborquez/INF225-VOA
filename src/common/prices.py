@@ -185,13 +185,13 @@ class Prices(object):
 
         This method was taken from 'A Review of Volatility and Option Pricing' by Sovan Mitra, Section 3.2
 
-        We can calculate the historical volatility (or sigma) of prices X using
+        We can calculate the historical volatility (or sigma) of prices X using this
 
         sigma = sqrt(Vx)/sqrt(dt)
 
         where
         Vx is the sample variance 
-            Vx = 1/(n-1) * SUM(Xi - MEAN(X))
+            Vx = 1/(n-1) * SUM((Xi - MEAN(X))**2)
 
         Xi is calculated in all steps
             Xi = ln(X(t_{i})/ X(t_{i-1}))
