@@ -3,7 +3,7 @@ const path = require('path');
 const url = require('url');
 
 /*
- * electron initialization
+ *  electron initialization
  */
 
 const rendererDir = path.join(__dirname, '../renderer');
@@ -49,10 +49,15 @@ app.on('activate', function () {
   }
 })
 
+/*
+ *  global data
+ */
+
+ let companies = null;
 
 /*
- * application functionality
-*/
+ *  application functionality
+ */
 
 valorizeLocal = require('./valorizationLocal');
 valorizeRemote = require('./valorizationRemote');
@@ -76,5 +81,14 @@ ipc.on("valorize remote", (event, args) => {
 });
 
 ipc.on("companies", (event, args) => {
-  getCompaniesSymbols(event);
+  if (companies === null || args.force_update) {
+    getCompaniesSymbols((response) => {
+      companies = response;
+      event.sender.send("companies_ready", companies);
+    });
+  }
+  else
+  {
+    event.sender.send("companies_ready", companies);
+  }
 })
