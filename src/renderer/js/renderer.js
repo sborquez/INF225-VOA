@@ -29,7 +29,7 @@ function openFile () {
 
 function reloadCompanies()
 {
-  ipc.send('companies');
+  ipc.send('companies', {force_update: false});
 }
 
 $('#local_submit').on("click", () => {
