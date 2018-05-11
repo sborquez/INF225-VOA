@@ -17,7 +17,7 @@ class OptionPricing(object):
         """
         self.initial_price = S0
         self.strike_price  = K
-        self.time_to_maturity = T
+        self.maturity_time = T
         self.riskless_rate = r
         self.volatility  = sigma
         self.I = I
@@ -30,7 +30,7 @@ class OptionPricing(object):
         """
         
         if T == 0:
-            T = self.time_to_maturity
+            T = self.maturity_time
         
         # using time in years
         T /= 365.0
@@ -57,7 +57,7 @@ class OptionPricing(object):
         """
         
         if T == 0:
-            T = self.time_to_maturity
+            T = self.maturity_time
         if simulations == 0:
             simulations = self.I
 
@@ -98,6 +98,15 @@ class OptionPricing(object):
         raise NotImplementedError
 
 
+# TEST
+class DumbOptionPricing(OptionPricing):
+    def getCallOption(self):
+        return 1
+
+    def getPullOption(self):
+        return -1
+
+
 class EuropeanOptionPricing(OptionPricing):
     """
     EuropeanOptionPricing is european style option.
@@ -105,12 +114,12 @@ class EuropeanOptionPricing(OptionPricing):
     date of the option, at a single pre-defined point in time T.
     """
     def getCallOption(self):
-        t = self.time_to_madurity/365.0
+        t = self.maturity_time/365.0
         payoff = np.mean(self.simulatePrices()) - self.strike_price
         return np.exp(-1.0 * self.riskless_rate * t) * payoff
         
     def getPullOption(self):
-        t = self.time_to_madurity/365.0        
+        t = self.maturity_time/365.0        
         payoff = self.strike_price - np.mean(self.simulatePrices())
         return np.exp(-1.0 * self.riskless_rate * t) * payoff
 
@@ -122,11 +131,11 @@ class AmericanOptionPricing(OptionPricing):
     the expiration date, that is from t in (0,T).
     """
     def getCallOption(self, steps=1):
-        T = np.linspace(0, 1, self.time_to_madurity//steps)*(self.time_to_madurity/365.0)
+        T = np.linspace(0, 1, self.maturity_time//steps)*(self.maturity_time/365.0)
         payoff = np.mean(self.simulatePrices(), axis=1) - self.strike_price
         return np.exp(-1.0 * self.riskless_rate * T) * payoff
         
     def getPullOption(self, steps=1):
-        T = np.linspace(0, 1, self.time_to_madurity//steps)*(self.time_to_madurity/365.0)
+        T = np.linspace(0, 1, self.maturity_time//steps)*(self.maturity_time/365.0)
         payoff = self.strike_price - np.mean(self.simulatePrices(), axis=1)
         return np.exp(-1.0 * self.riskless_rate * T) * payoff

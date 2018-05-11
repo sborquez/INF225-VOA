@@ -147,6 +147,14 @@ class Prices(object):
         """
         #TODO
         pass
+    
+    def getLastPrice(self):
+        """
+        getLastPrice return the last closing price of the loaded data, otherwise return None
+        """
+        if  self.isLoaded and self.isValidData():
+            return self.data["Close"][0]
+        return None
 
     def getPlot(self):
         """
