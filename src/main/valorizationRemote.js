@@ -2,21 +2,11 @@ const path = require('path');
 const PythonCall = require('./utils/pythonProtocol');
 const rendererDir = path.join(__dirname, '../renderer');
 
-function valorizeFromCloud(event, win, download_path, action_code, action_name, r_value, option_type, start, end) {
-
-  const args = {
-    download_path: download_path,
-    code: action_code,
-    name: action_name,
-    r: r_value,
-    type: option_type,
-    start: start,
-    end: end
-  };
-
+function valorizeFromCloud(event, win, args, download_path) {
   let csv_path;
   let plot_path;
 
+  args.download_path = download_path;
   const call = new PythonCall('calculate.py', args);
 
   call.onStatus("loaded", (rel_csv_path) => {

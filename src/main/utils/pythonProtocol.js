@@ -61,8 +61,10 @@ function callbackMessage(message, argument, callback_list, warn=false) {
 function parseArguments(arguments_obj)
 {
   const args = new Array();
-  for (let arg_name in arguments_obj)
+  for (let arg_name in arguments_obj) {
     args.push("--" + arg_name + "=" + arguments_obj[arg_name]);
+    console.log(arg_name);
+  }
   return args;
 }
 
@@ -73,6 +75,7 @@ class PythonCall {
     this.__started = false;
     this.__options = Object.assign({}, options);
     this.__options.args = parseArguments(args)
+    console.log(parseArguments(args))
 
     this.result_callback = null;
     this.__status_callbacks = {};

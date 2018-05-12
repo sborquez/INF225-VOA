@@ -112,20 +112,17 @@ def main():
 
         # Strike price
         #TEST --- TODO Agregar estos argumentos a la vista.
-        #K=300
         K = args["strike_price"]
         Protocol.sendStatus("setting strike price", K)
 
-        # Madurity time
+        # Maturity time
         #TEST --- TODO Agregar estos argumentos a la vista.
-        #T = args["maturity_time"]
-        T=10
-        Protocol.sendStatus("setting madurity time", T)
+        T = args["maturity_time"]
+        Protocol.sendStatus("setting maturity time", T)
         
         # Simulations
         #TEST --- TODO Agregar estos argumentos a la vista.
-        #I = args["simulations"]
-        I = 1000
+        I = args["simulations"]
         Protocol.sendStatus("setting Monte Carlo simulations", I)
         
         # Riskless rate

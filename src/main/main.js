@@ -17,7 +17,7 @@ let mainWindow
 function createWindow () {
   mainWindow = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 715,
     title: "Valorización de Opciones",
     resizable: false
   })
@@ -70,14 +70,16 @@ ipc.on("valorize local", (event, args) => {
 });
 
 ipc.on("valorize remote", (event, args) => {
-  let start = new Date(args["start"]).getTime() / 1000;
-  let end = new Date(args["end"]).getTime() / 1000;
+  console.log(args.start);
+  console.log(args.end);
+  args.start = new Date(args.start).getTime() / 1000;
+  args.end = new Date(args.end).getTime() / 1000;
   
   console.log("calling remote valorize script");
-  console.log("arguments","./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], start, end);  
+  console.log("arguments","./", args);
   
   // TODO change download path
-  valorizeRemote(event, mainWindow, "./", args["action_code"], args["action_name"], args["r_value"], args["option_type"], start, end);
+  valorizeRemote(event, mainWindow, args, "./");
 });
 
 ipc.on("companies", (event, args) => {
