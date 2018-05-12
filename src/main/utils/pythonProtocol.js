@@ -6,7 +6,7 @@ const PythonShell = require("python-shell");
 const options = {
   mode: "text",
   scriptPath: path.join(__dirname, "../../common"),
-  pythonOptions: ['-V']
+  pythonOptions: ['-u']
 }
 
 const messageType = {
