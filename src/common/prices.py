@@ -1,11 +1,21 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import datetime
 import urllib
 import csv
 
 from protocol import Protocol
+
+try:
+    import pandas as pd
+    import numpy as np
+except ImportError:
+    Protocol.sendError("Module not installed", "pandas")
+    exit(0)
+
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    Protocol.sendError("Module not installed", "matplotlib")
+    exit(0)
 
 TEMP_DATA_PATH="./"
 

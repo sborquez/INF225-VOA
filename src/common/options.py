@@ -1,5 +1,12 @@
-import numpy as np 
-import pandas as pd
+from protocol import Protocol
+
+try:
+    import numpy as np
+    import pandas as pd
+except ImportError:
+    Protocol.sendError("Module not installed", "pandas")
+    exit(0)
+
 
 class OptionPricing(object):
     """

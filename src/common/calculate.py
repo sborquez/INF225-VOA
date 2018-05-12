@@ -1,5 +1,6 @@
 import sys
 from time import sleep
+
 from protocol import Protocol
 from prices import Prices
 from options import EuropeanOptionPricing, AmericanOptionPricing, DumbOptionPricing
