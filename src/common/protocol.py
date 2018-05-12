@@ -1,3 +1,7 @@
+from __future__ import print_function
+
+import sys
+
 class Protocol(object):
 	"""
 	Protocol is used to send messages to javascript's shell
@@ -25,3 +29,9 @@ class Protocol(object):
 		sendResult send a result message to javascript's shell.
 		"""
 		print("RESULT", msg, sep='\t')
+
+Protocol.sendStatus("Interpreter path", sys.executable)
+
+if sys.version_info < (3, 0):
+    Protocol.sendError("Requires Python 3.x", sys.version_info.major)
+    sys.exit(0)

@@ -6,7 +6,7 @@ const PythonShell = require("python-shell");
 const options = {
   mode: "text",
   scriptPath: path.join(__dirname, "../../common"),
-  pythonOptions: ['-u']
+  pythonOptions: ['-V']
 }
 
 const messageType = {
@@ -20,7 +20,7 @@ function logpython(message) {
 }
 
 function logpythonerror(message) {
-  console.log("[error]: " + message)
+  console.log("[error]:  " + message)
 }
 
 function parseMessage(message) {

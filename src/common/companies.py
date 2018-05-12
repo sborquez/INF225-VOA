@@ -2,9 +2,15 @@ import json
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
-from bs4 import BeautifulSoup
 
 from protocol import Protocol
+
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    Protocol.sendError("Module not installed", "beautifulsoup4")
+    exit(0)
+    
 
 def requests_retry_session(retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 504)):
     session = requests.Session()
