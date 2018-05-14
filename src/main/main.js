@@ -70,10 +70,13 @@ ipc.on("valorize local", (event, args) => {
 });
 
 ipc.on("valorize remote", (event, args) => {
-  console.log(args.start);
-  console.log(args.end);
-  args.start = new Date(args.start).getTime() / 1000;
-  args.end = new Date(args.end).getTime() / 1000;
+  args.end = new Date();
+  const diff = Math.abs(new Date(args.maturity_time).getTime() - args.end.getTime());
+  args.start = new Date(args.end - diff);
+  args.maturity_time = diff / (1000 * 3600 * 24 * 365);
+
+  args.start = Math.round(new Date(args.start).getTime() / 1000);
+  args.end = Math.round(new Date(args.end).getTime() / 1000);
   
   console.log("calling remote valorize script");
   console.log("arguments","./", args);
