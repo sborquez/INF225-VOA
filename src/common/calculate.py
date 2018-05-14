@@ -111,17 +111,14 @@ def main():
         Protocol.sendStatus("setting initial price", S0)
 
         # Strike price
-        #TEST --- TODO Agregar estos argumentos a la vista.
         K = args["strike_price"]
         Protocol.sendStatus("setting strike price", K)
 
         # Maturity time
-        #TEST --- TODO Agregar estos argumentos a la vista.
         T = args["maturity_time"]
         Protocol.sendStatus("setting maturity time", T)
         
         # Simulations
-        #TEST --- TODO Agregar estos argumentos a la vista.
         I = args["simulations"]
         Protocol.sendStatus("setting Monte Carlo simulations", I)
         
@@ -138,9 +135,6 @@ def main():
 
         # option is ...
         Protocol.sendStatus("using Dumb Option")
-        option = DumbOptionPricing(S0, K, T, r, sigma, I)
-        """
-        # TODO fix algorithm
         if args["type"] == "EU":
             option = EuropeanOptionPricing(S0, K, T, r, sigma, I)
             Protocol.sendStatus("using European Option")
@@ -150,7 +144,6 @@ def main():
         else:
             Protocol.sendError("wrong option type", args["type"])
             exit(1)
-        """
 
         # TODO ONLY BUY CALL
         Protocol.sendStatus("getting call option")

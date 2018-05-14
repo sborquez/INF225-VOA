@@ -163,7 +163,8 @@ class Prices(object):
         getLastPrice return the last closing price of the loaded data, otherwise return None
         """
         if  self.isLoaded and self.isValidData():
-            return self.data["Close"][0]
+            return self.data["Close"].iloc[-1]
+        
         return None
 
     def getPlot(self):
