@@ -20,7 +20,7 @@ def parseArgs(args):
         "name"  : None,
         "code"  : None,
         "r": None,
-        "type": None,
+        "option_type": None,
         "simulations": None,   #TODO using this to calculate I simulations.
         "strike_price": None,  #TODO change for user-defined strike price, in dollars maybe ?)
         "maturity_time": None,  #TODO change for user-defined period in days
@@ -37,8 +37,8 @@ def parseArgs(args):
             parsed_args["name"] = arg.split("--name=")[1]
         elif arg.startswith("--r="):
             parsed_args["r"] = arg.split("--r=")[1]
-        elif arg.startswith("--type="):
-            parsed_args["type"] = arg.split("--type=")[1]
+        elif arg.startswith("--option_type="):
+            parsed_args["option_type"] = arg.split("--option_type=")[1]
         elif arg.startswith("--start="):
             parsed_args["start"] = arg.split("--start=")[1]
         elif arg.startswith("--end="):
@@ -111,19 +111,19 @@ def main():
         Protocol.sendStatus("setting initial price", S0)
 
         # Strike price
-        K = args["strike_price"]
+        K = float(args["strike_price"])
         Protocol.sendStatus("setting strike price", K)
 
         # Maturity time
-        T = args["maturity_time"]
+        T = float(args["maturity_time"])
         Protocol.sendStatus("setting maturity time", T)
         
         # Simulations
-        I = args["simulations"]
+        I = int(args["simulations"])
         Protocol.sendStatus("setting Monte Carlo simulations", I)
         
         # Riskless rate
-        r = args["r"]
+        r = float(args["r"])
         Protocol.sendStatus("setting riskless rate", r)
         
         # Here we will price the option
@@ -134,16 +134,16 @@ def main():
         Protocol.sendStatus("using volatility", sigma)
 
         # option is ...
-        Protocol.sendStatus("using Dumb Option")
-        if args["type"] == "EU":
+        if args["option_type"] == "EU":
             option = EuropeanOptionPricing(S0, K, T, r, sigma, I)
             Protocol.sendStatus("using European Option")
-        elif args["type"] == "USA":
+        elif args["option_type"] == "USA":
             option = AmericanOptionPricing(S0, K, T, r, sigma, I)
             Protocol.sendStatus("using American Option")            
         else:
-            Protocol.sendError("wrong option type", args["type"])
-            exit(1)
+            Protocol.sendError("wrong option type", args["option_type"])
+            option = EuropeanOptionPricing(S0, K, T, r, sigma, I)
+            Protocol.sendStatus("using European Option")
 
         # TODO ONLY BUY CALL
         Protocol.sendStatus("getting call option")
