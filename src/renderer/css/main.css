@@ -1,9 +1,26 @@
+:root {
+  --color0: rgb(21, 22, 24);
+  --color1: rgb(82, 76, 82);
+  --color2: rgb(143, 162, 160);
+  --color3: rgb(30, 32, 36);
+  --color4: rgb(38, 46, 45);
+}
+
 form {
   display: grid;
 }
 
 html {
   width: 100%;
+  background-color: var(--color0);
+  color: whitesmoke;
+}
+
+input {
+  border-radius: 10px;
+  background-color: var(--color3);
+  border: none;
+  padding: 8px 5px 8px 5px;
 }
 
 body {
