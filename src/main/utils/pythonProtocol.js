@@ -3,6 +3,8 @@
 const path = require('path');
 const PythonShell = require("python-shell");
 
+const maxMessageLength = 100;
+
 const options = {
   mode: "text",
   scriptPath: path.join(__dirname, "../../common"),
@@ -16,7 +18,11 @@ const messageType = {
 };
 
 function logpython(message) {
-  console.log("[python]: " + message)
+  let cleaned_msg = message;
+  if (cleaned_msg.length > maxMessageLength)
+    cleaned_msg = message.substring(0, maxMessageLength) + "...";
+
+  console.log("[python]: " + cleaned_msg)
 }
 
 function logpythonerror(message) {
