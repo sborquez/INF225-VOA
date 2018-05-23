@@ -1,8 +1,10 @@
+/* General */
+
 :root {
   --color0: rgb(21, 22, 24);
-  --color1: rgb(82, 76, 82);
-  --color2: rgb(143, 162, 160);
-  --color3: rgb(30, 32, 36);
+  --alt-background: rgb(35, 37, 41);
+  --highlight: rgb(143, 162, 160);
+  --background: rgb(30, 32, 36);
   --color4: rgb(38, 46, 45);
 }
 
@@ -12,20 +14,100 @@ form {
 
 html {
   width: 100%;
-  background-color: var(--color0);
+  height: 100%;
+  background-color: var(--background);
   color: whitesmoke;
+  font-family: 'Tajawal', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  width: 100%;
 }
 
 input {
   border-radius: 10px;
-  background-color: var(--color3);
+  background-color: var(--background);
   border: none;
   padding: 8px 5px 8px 5px;
 }
 
-body {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
+.undefined {
+  opacity: 0.5;
 }
+
+/* Valorizer */
+
+.valorizer {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-columns: 30% 70%;
+  grid-template-rows: 80% 20%
+}
+
+/* Valorizer parameters */
+
+.valorizer-params {
+  display: flex;
+  flex-direction: column;
+
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2
+}
+
+.valorizer-item {
+  padding: 10px;
+}
+
+.valorizer-item:after {
+  content: "";
+  display:block;
+  position: relative;
+  left: 0;
+  top: 10px;
+  width: 100%;
+  height: 0px;
+  border-bottom: var(--highlight) 1px solid;
+}
+
+.valorizer-item:hover {
+  background-color: var(--alt-background);
+  cursor: pointer;
+}
+
+.valorizer-item > * {
+  display: block;
+}
+
+.valorizer-item > input, .valorizer-item > div {
+  display: none;
+}
+
+/* Valorizer fill */
+
+.valorizer-fill {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2
+}
+
+/* Valorizer foot */
+
+.valorizer-foot {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+/* Companies table */
 
 #companies {
   min-height: 200px;
@@ -38,5 +120,5 @@ body {
 }
 
 #companies_table th, td {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid whitesmoke;
 }

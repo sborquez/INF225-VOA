@@ -1,53 +1,92 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../css/main.css">
-  </head>
-  <body>
-    <div id="companies">
-      <table id="companies_table">
-        <tr>
-            <th>Symbol</th>
-            <th>Name</th>
-        </tr>
-      </table>
-    </div>
-    <div id="valorize">
-      <form id="main_form">
-        <label>Nombre de la Acción: </label>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="../css/main.css">
+  <!-- TODO: Choose definitive font-family and make it local -->
+  <link href="https://fonts.googleapis.com/css?family=Tajawal:200" rel="stylesheet">
+</head>
+
+<body>
+  <form class="valorizer">
+    <div class="valorizer-params">
+      <div class="valorizer-item" data-item-type="name">
+        <span>Nombre de la Acción:</span>
+        <span class="undefined">Sin definir</span>
         <input name="name" type="text" placeholder="...">
-
-        <label>Código de la Acción: </label>
+      </div>
+      <div class="valorizer-item" data-item-type="code">
+        <span>Código de la Acción: </span>
+        <span class="undefined">Sin definir</span>
         <input name="code" type="text" placeholder="...">
-
-        <label>Tasa Libre de Riesgo: </label>
+      </div>
+      <div class="valorizer-item" data-item-type="r">
+        <span>Tasa Libre de Riesgo: </span>
+        <span class="undefined">Sin definir</span>
         <input name="r" type="text" placeholder="r">
-
-        <label>Precio de compra</label>
+      </div>
+      <div class="valorizer-item" data-item-type="price">
+        <span>Precio de compra</span>
+        <span class="undefined">Sin definir</span>
         <input name="strike_price" type="number" placeholder="...">
-
-        <label>Tiempo de Madurez (Años)</label>
+      </div>
+      <div class="valorizer-item" data-item-type="maturity">
+        <span>Tiempo de Madurez (Años)</span>
+        <span class="undefined">Sin definir</span>
         <input name="maturity_time" type="date" placeholder="...">
-
-        <label>No. de simulaciones</label>
+      </div>
+      <div class="valorizer-item" data-item-type="simulations">
+        <span>No. de simulaciones</span>
+        <span class="undefined">Sin definir</span>
         <input name="simulations" type="number" value=1000>
-
-        <label>Tipo: </label>
-        <select name="option_type">
-          <option value="EU">Europea</option>
-          <option value="USA">Americana</option>
-        </select>
-
-        <label>Ruta del archivo csv: </label>
-        <button type="button" id="file_submit">Elegir archivo...</button>
-        <input id="data_input" name="filepath_data" type="hidden">
-        <button type="button" id="local_submit">Valorizar Archivo</button>
-        <button type="button" id="remote_submit">Valorizar de Internet</button>
-      </form>
+      </div>
+      <div class="valorizer-item" data-item-type="type">
+        <span>Tipo: </span>
+        <span class="undefined">Sin definir</span>
+        <div>
+          <input type="radio" name="option_type" value="EU" checked>Europea</option>
+          <input type="radio" name="option_type" value="USA">Americana</option>
+        </div>
+      </div>
     </div>
-    <script>
-      require("../js/renderer");
-    </script>
-  </body>
+    </div>
+    <div class="valorizer-foot">
+      <span>Ruta del archivo csv: </span>
+      <button type="button" id="file_submit">Elegir archivo...</button>
+      <input id="data_input" name="filepath_data" type="hidden">
+      <button type="button" id="local_submit">Valorizar Archivo</button>
+      <button type="button" id="remote_submit">Valorizar de Internet</button>
+    </div>
+    <div class="valorizer-fill">
+      <div class="valorizer-desc" data-item-type="name">
+        <div id="companies">
+          <table id="companies_table">
+            <tr>
+              <th>Symbol</th>
+              <th>Name</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="valorizer-desc" data-item-type="code">
+      </div>
+      <div class="valorizer-desc" data-item-type="r">
+      </div>
+      <div class="valorizer-desc" data-item-type="price">
+      </div>
+      <div class="valorizer-desc" data-item-type="maturity">
+      </div>
+      <div class="valorizer-desc" data-item-type="simulations">
+      </div>
+      <div class="valorizer-desc" data-item-type="type">
+      </div>
+    </div>
+    </div>
+  </form>
+  <script>
+    require("../js/renderer");
+  </script>
+</body>
+
 </html>
