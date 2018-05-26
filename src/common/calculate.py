@@ -49,7 +49,8 @@ def main():
         
         # Plot the prices
         #filename = prices.getPlot()
-        json_plot = Plotter.timeSeries(prices.data.Date, High=prices.data.High , Low=prices.data.Low, Close=prices.data.Close)
+        #json_plot = Plotter.timeSeries(prices.data.Date, High=prices.data.High , Low=prices.data.Low, Close=prices.data.Close)
+        json_plot = Plotter.dummyPlot()
         Protocol.sendStatus("plot generated", json_plot)
 
         Protocol.sendStatus("setting simulation params")

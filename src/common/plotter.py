@@ -34,6 +34,19 @@ class Plotter(object):
         }
         return dumps(plot_data)
 
+    @staticmethod
+    def dummyPlot():
+        plot_data = {
+                'bindto': '#prices',        
+                'data': {
+                    'columns': [
+                        ['data1', 30, 200, 100, 400, 150, 250],
+                        ['data2', 50, 20, 10, 40, 15, 25]
+                        ]
+                    }
+            }
+        return dumps(plot_data)
+
 def main():
     netflix = Prices()
     netflix.load("../../test/data/NFLX.csv")
