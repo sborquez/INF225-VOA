@@ -4,6 +4,7 @@ from time import sleep
 from protocol import Protocol
 from prices import Prices
 from options import EuropeanOptionPricing, AmericanOptionPricing
+from plotter import Plotter
 
 def main():
     
@@ -47,8 +48,9 @@ def main():
         Protocol.sendStatus("loaded", args["csv"])
         
         # Plot the prices
-        filename = prices.getPlot()
-        Protocol.sendStatus("plot generated", filename)
+        #filename = prices.getPlot()
+        json_plot = Plotter.timeSeries(prices.data.Date, High=prices.data.High , Low=prices.data.Low, Close=prices.data.Close)
+        Protocol.sendStatus("plot generated", json_plot)
 
         Protocol.sendStatus("setting simulation params")
 
