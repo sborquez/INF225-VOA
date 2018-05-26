@@ -5,17 +5,13 @@ import csv
 from protocol import Protocol
 
 try:
+    import matplotlib.pyplot as plt    
     import pandas as pd
     import numpy as np
-except ImportError:
-    Protocol.sendError("Module not installed", "pandas")
+except ImportError as err:
+    Protocol.sendError("Module not installed", err.name)
     exit(0)
 
-try:
-    import matplotlib.pyplot as plt
-except ImportError:
-    Protocol.sendError("Module not installed", "matplotlib")
-    exit(0)
 
 TEMP_DATA_PATH="./"
 
@@ -124,7 +120,7 @@ class Prices(object):
 
     def load(self, csv_filepath):
         """
-        load loads and reads csv file
+        load reads a csv file
         """
         try:
             self.data = pd.read_csv(csv_filepath)
