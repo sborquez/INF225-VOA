@@ -1,5 +1,6 @@
 requests
 html5lib
+numpy
 pandas
 matplotlib
-QuantLib-Python
+BeautifulSoup
