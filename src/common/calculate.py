@@ -60,11 +60,11 @@ def validateArgs(args):
     return None
 
 def main():
-    args = parseArgs(sys.argv[1:])
-    err = validateArgs(args)
-    if err is not None:
-        Protocol.sendError("invalid arguments", err)
-        exit(1)
+    
+    args, err = Protocol.receiveParameters(sys.argv[1:])
+    if err:
+        Protocol.sendError("invalid arguments", args)
+        return 
 
     # prices will get the company's data
     prices = Prices()

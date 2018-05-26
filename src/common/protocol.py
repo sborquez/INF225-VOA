@@ -4,8 +4,51 @@ import sys
 
 class Protocol(object):
 	"""
-	Protocol is used to send messages to javascript's shell
+	Protocol is used to comunication between javascript and python
 	"""
+
+	@staticmethod
+	def receiveParameters(parameters):
+		"""
+		receiveParameters it is used to parse parameters using the 'defined_parameters' dict.
+		"""
+
+		# parameter: (type, optional, default, description)		
+		defined_parameters = {\
+			"csv"  :  		 (str, True , None, "path to csv file"),
+			"download_path": (str, True , None, "path to download file"),
+			"name"  : 	     (str, True, None, "company's name"),
+			"code"  : 		 (str, False, None, "company's code"),
+			"r": 			 (float, False, 0.05, "riskless rate"),
+			"type":			 (str, False, "EU", "option type"),
+			"simulations":   (int, False, 1000, "MonteCarlo simulations"),
+			"strike_price":  (float, False, None, "strike price"),
+			"maturity_time": (float, False, None, "days to buy or sell"),
+			"start": 		 (int, False, None, "start"),
+			"end":  		 (int, False, None, "end")
+		}	
+		
+		# Parse input parameters
+		parsed_params = dict()
+		for param in parameters:
+			if param.startswith("--") and len(param.split("=")) == 2:
+				key, value = param[2:].split("=")
+				parsed_params[key] = value
+			else:
+				return param, True
+
+		# Validate input parameters
+		for key, rule in defined_parameters.items():
+			rule_type, rule_null, rule_default, rule_desc = rule
+			value = parsed_params.get(key, rule_default)
+			if value is None and not rule_null:
+				return (key, value, rule_desc), True
+			try:
+				value = rule_type(value)
+			except ValueError:
+				return (key, value, rule_desc), True
+				
+		return parsed_params, False
 
 	@staticmethod
 	def sendError(msg, err=None):
