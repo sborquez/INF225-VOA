@@ -18,11 +18,8 @@ function valorizeFromCSV(event, win, csv_path, action_code, action_name, r_value
     win.loadURL(path.join(rendererDir, 'html/results.html'));
   })
 
-  let plot_path;
-
-  call.onStatus("plot generated", (rel_plot_path) => {
-    plot_path = path.join(__dirname, "./../../", rel_plot_path)
-    event.sender.send("plot generated", plot_path);
+  call.onStatus("plot generated", (plot_obj) => {
+    event.sender.send("plot generated", plot_obj);
     event.sender.send("csv loaded", csv_path);
   })
 

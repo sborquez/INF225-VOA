@@ -12,7 +12,8 @@ const app = electron.app;
 const ipc = electron.ipcMain;
 
 const BrowserWindow = electron.BrowserWindow;
-let mainWindow
+let mainWindow;
+let resultWindow;
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -21,6 +22,9 @@ function createWindow () {
     title: "Valorización de Opciones",
     resizable: false
   })
+
+  resultWindow = new BrowserWindow({parent: mainWindow, show: false});
+  resultWindow.loadURL(path.join(rendererDir, 'html/results.html'));
 
   mainWindow.loadURL(url.format({
     pathname: path.join(rendererDir, 'html/index.html'),
@@ -82,7 +86,7 @@ ipc.on("valorize remote", (event, args) => {
   console.log("arguments","./", args);
   
   // TODO change download path
-  valorizeRemote(event, mainWindow, args, "./");
+  valorizeRemote(resultWindow, args, "./");
 });
 
 ipc.on("companies", (event, args) => {
