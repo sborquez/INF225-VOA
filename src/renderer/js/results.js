@@ -7,9 +7,10 @@ function tableFromCSV(filepath_csv)
   console.log(filepath_csv);
 }
 
-function plot(plot_obj)
+let res;
+function plot()
 {
-  c3.generate(plot_obj);
+  c3.generate(res);
 }
 
 ipc.on('csv loaded', (event, filepath) => {
@@ -17,5 +18,6 @@ ipc.on('csv loaded', (event, filepath) => {
 });
 
 ipc.on('plot generated', (event, plot_obj) => {
-  plot(plot_obj);
+  res = plot_obj;
+  plot();
 });
