@@ -86,6 +86,7 @@ class PythonCall {
     this.result_callback = null;
     this.__status_callbacks = {};
     this.__error_callbacks = {};
+    this.__end_callback = null;
   }
 
   start() {
@@ -100,6 +101,9 @@ class PythonCall {
       });
 
       shell.end((err, code, signal) => {
+        if (this.__end_callback)
+          this.__end_callback();
+
         if (err) throw err;
         if (code === 0) {
           console.log('python script finished');
@@ -143,6 +147,10 @@ class PythonCall {
 
   onError(msg, callback) {
     this.__error_callbacks[msg] = callback;
+  }
+
+  onEnd(callback) {
+    this.__end_callback = callback;
   }
 }
 

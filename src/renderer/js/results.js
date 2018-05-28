@@ -7,17 +7,12 @@ function tableFromCSV(filepath_csv)
   console.log(filepath_csv);
 }
 
-let res;
-function plot()
+function plot(plot_obj)
 {
-  c3.generate(res);
+  c3.generate(plot_obj);
 }
 
-ipc.on('csv loaded', (event, filepath) => {
-  tableFromCSV(filepath);
-});
-
-ipc.on('plot generated', (event, plot_obj) => {
-  res = plot_obj;
-  plot();
-});
+ipc.on('results', (event, result) => {
+  plot(result.plot);
+  tableFromCSV(result.csv);
+})

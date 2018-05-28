@@ -2,9 +2,9 @@ const path = require('path');
 const PythonCall = require('./utils/pythonProtocol');
 const rendererDir = path.join(__dirname, '../renderer');
 
-function valorizeFromCloud(win, args, download_path) {
+function valorizeFromCloud(callback, args, download_path) {
   let csv_path;
-  let plot_path;
+  let plot_obj;
 
   args.download_path = download_path;
   const call = new PythonCall('calculate.py', args);
@@ -14,12 +14,12 @@ function valorizeFromCloud(win, args, download_path) {
   });
 
   call.onStatus("plot generated", (plot_json) => {
-    const plot_obj = JSON.parse(plot_json);
+    plot_obj = JSON.parse(plot_json);
+  });
 
-    win.webContents.send("plot generated", plot_obj);
-    win.webContents.send("csv loaded", csv_path);
-    win.show();
-  })
+  call.onEnd(() => {
+    callback(plot_obj, csv_path);
+  });
 
   call.start();
 }
