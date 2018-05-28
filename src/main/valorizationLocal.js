@@ -3,28 +3,23 @@ const PythonCall = require('./utils/pythonProtocol');
 
 const rendererDir = path.join(__dirname, '../renderer');
 
-function valorizeFromCSV(event, win, csv_path, action_code, action_name, r_value, option_type) {
-  const args = {
-    csv: csv_path,
-    code: action_code,
-    name: action_name,
-    r: r_value,
-    type: option_type
-  }
+function valorizeFromCSV(callback, args) {
+  let csv_path;
+  let plot_obj;
 
   const call = new PythonCall("calculate.py", args);
 
   call.onStatus("loaded", () => {
-    win.loadURL(path.join(rendererDir, 'html/results.html'));
+    csv_path = args.filepath_data;
   })
 
-  let plot_path;
-
-  call.onStatus("plot generated", (rel_plot_path) => {
-    plot_path = path.join(__dirname, "./../../", rel_plot_path)
-    event.sender.send("plot generated", plot_path);
-    event.sender.send("csv loaded", csv_path);
+  call.onStatus("plot generated", (plot_obj) => {
+    plot_obj = JSON.parse(plot_json);
   })
+
+  call.onEnd(() => {
+    callback(plot_obj, csv_path);
+  });
 
   call.start();
 }

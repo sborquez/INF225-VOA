@@ -3,6 +3,8 @@
 const path = require('path');
 const PythonShell = require("python-shell");
 
+const maxMessageLength = 100;
+
 const options = {
   mode: "text",
   scriptPath: path.join(__dirname, "../../common"),
@@ -16,7 +18,11 @@ const messageType = {
 };
 
 function logpython(message) {
-  console.log("[python]: " + message)
+  let cleaned_msg = message;
+  if (cleaned_msg.length > maxMessageLength)
+    cleaned_msg = message.substring(0, maxMessageLength) + "...";
+
+  console.log("[python]: " + cleaned_msg)
 }
 
 function logpythonerror(message) {
@@ -63,7 +69,6 @@ function parseArguments(arguments_obj)
   const args = new Array();
   for (let arg_name in arguments_obj) {
     args.push("--" + arg_name + "=" + arguments_obj[arg_name]);
-    console.log(arg_name);
   }
   return args;
 }
@@ -80,6 +85,7 @@ class PythonCall {
     this.result_callback = null;
     this.__status_callbacks = {};
     this.__error_callbacks = {};
+    this.__end_callback = null;
   }
 
   start() {
@@ -94,6 +100,9 @@ class PythonCall {
       });
 
       shell.end((err, code, signal) => {
+        if (this.__end_callback)
+          this.__end_callback();
+
         if (err) throw err;
         if (code === 0) {
           console.log('python script finished');
@@ -137,6 +146,10 @@ class PythonCall {
 
   onError(msg, callback) {
     this.__error_callbacks[msg] = callback;
+  }
+
+  onEnd(callback) {
+    this.__end_callback = callback;
   }
 }
 

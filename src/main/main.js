@@ -12,15 +12,16 @@ const app = electron.app;
 const ipc = electron.ipcMain;
 
 const BrowserWindow = electron.BrowserWindow;
-let mainWindow
+let mainWindow;
+let resultWindow;
 
-function createWindow () {
+function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 715,
     title: "Valorización de Opciones",
     resizable: false
-  })
+  });
 
   mainWindow.loadURL(url.format({
     pathname: path.join(rendererDir, 'html/index.html'),
@@ -53,7 +54,7 @@ app.on('activate', function () {
  *  global data
  */
 
- let companies = null;
+let companies = null;
 
 /*
  *  application functionality
@@ -63,26 +64,42 @@ valorizeLocal = require('./valorizationLocal');
 valorizeRemote = require('./valorizationRemote');
 getCompaniesSymbols = require('./companies/companies');
 
+function getDateParams(maturity_time) {
+  const res = {};
+
+  res.end = new Date();
+  const diff = Math.abs(new Date(maturity_time).getTime() - res.end.getTime());
+  res.start = new Date(res.end - diff);
+
+  res.maturity_time = diff / (1000 * 3600 * 24 * 365);
+  res.start = Math.round(new Date(res.start).getTime() / 1000);
+  res.end = Math.round(new Date(res.end).getTime() / 1000);
+  return res;
+}
+
+function showResults(plot_obj, csv_path) {
+  mainWindow.webContents.send("results", {
+    "plot": plot_obj,
+    "csv": csv_path
+  })
+}
+
 ipc.on("valorize local", (event, args) => {
+  Object.assign(args, getDateParams(args.maturity_time));
+
   console.log("calling local valorize script");
-  console.log("arguments",args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
-  valorizeLocal(event, mainWindow, args["filepath_data"], args["action_code"], args["action_name"], args["r_value"], args["option_type"]);
+  console.log("arguments", args);
+  valorizeLocal(showResults, args);
 });
 
 ipc.on("valorize remote", (event, args) => {
-  args.end = new Date();
-  const diff = Math.abs(new Date(args.maturity_time).getTime() - args.end.getTime());
-  args.start = new Date(args.end - diff);
-  args.maturity_time = diff / (1000 * 3600 * 24 * 365);
+  Object.assign(args, getDateParams(args.maturity_time));
 
-  args.start = Math.round(new Date(args.start).getTime() / 1000);
-  args.end = Math.round(new Date(args.end).getTime() / 1000);
-  
   console.log("calling remote valorize script");
-  console.log("arguments","./", args);
-  
+  console.log("arguments", "./", args);
+
   // TODO change download path
-  valorizeRemote(event, mainWindow, args, "./");
+  valorizeRemote(showResults, args, "./");
 });
 
 ipc.on("companies", (event, args) => {
@@ -91,9 +108,7 @@ ipc.on("companies", (event, args) => {
       companies = response;
       event.sender.send("companies_ready", companies);
     });
-  }
-  else
-  {
+  } else {
     event.sender.send("companies_ready", companies);
   }
 })

@@ -3,8 +3,8 @@ from protocol import Protocol
 try:
     import numpy as np
     import pandas as pd
-except ImportError:
-    Protocol.sendError("Module not installed", "pandas")
+except ImportError as err:
+    Protocol.sendError("Module not installed", err.name)
     exit(0)
 
 
@@ -97,15 +97,6 @@ class OptionPricing(object):
 
     def getPullOption(self):
         raise NotImplementedError
-
-
-# TEST
-class DumbOptionPricing(OptionPricing):
-    def getCallOption(self):
-        return 1
-
-    def getPullOption(self):
-        return -1
 
 
 class EuropeanOptionPricing(OptionPricing):

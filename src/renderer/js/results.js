@@ -7,18 +7,12 @@ function tableFromCSV(filepath_csv)
   console.log(filepath_csv);
 }
 
-function showPlot(filepath)
+function plot(plot_obj)
 {
-  const img = $('<img id="plot"></img>')
-    .attr("src", filepath);
-
-  $('body').append(img);
+  c3.generate(plot_obj);
 }
 
-ipc.on('csv loaded', (event, filepath) => {
-  tableFromCSV(filepath);
-});
-
-ipc.on('plot generated', (event, filepath) => {
-  showPlot(filepath);
-});
+ipc.on('results', (event, result) => {
+  plot(result.plot);
+  tableFromCSV(result.csv);
+})

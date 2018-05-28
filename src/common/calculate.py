@@ -3,68 +3,15 @@ from time import sleep
 
 from protocol import Protocol
 from prices import Prices
-from options import EuropeanOptionPricing, AmericanOptionPricing, DumbOptionPricing
-
-
-##TODO ESTA SERA ELIMINADA
-# Reemplazada por Protocol.reciveParams()    
-def parseArgs(args):
-    """
-    parseArgs ...
-    """
-
-    # parsed_args 
-    parsed_args = {
-        "csv"  :  None,
-        "download_path": None,
-        "name"  : None,
-        "code"  : None,
-        "r": None,
-        "option_type": None,
-        "simulations": None,   #TODO using this to calculate I simulations.
-        "strike_price": None,  #TODO change for user-defined strike price, in dollars maybe ?)
-        "maturity_time": None,  #TODO change for user-defined period in days
-        "start": None, # TODO delete this and use only maturity_time
-        "end":  None # TODO delete this and use only maturity_time
-    }
-    
-    for arg in args:
-        if arg.startswith("--csv="):
-            parsed_args["csv"] = arg.split("--csv=")[1]
-        elif arg.startswith("--code="):
-            parsed_args["code"] = arg.split("--code=")[1]
-        elif arg.startswith("--name="):
-            parsed_args["name"] = arg.split("--name=")[1]
-        elif arg.startswith("--r="):
-            parsed_args["r"] = arg.split("--r=")[1]
-        elif arg.startswith("--option_type="):
-            parsed_args["option_type"] = arg.split("--option_type=")[1]
-        elif arg.startswith("--start="):
-            parsed_args["start"] = arg.split("--start=")[1]
-        elif arg.startswith("--end="):
-            parsed_args["end"] = arg.split("--end=")[1]
-        elif arg.startswith("--download_path="):
-            parsed_args["download_path"] = arg.split("--download_path=")[1]
-        elif arg.startswith("--simulations="):
-            parsed_args["simulations"] = arg.split("--simulations=")[1]
-        elif arg.startswith("--strike_price="):
-            parsed_args["strike_price"] = arg.split("--strike_price=")[1]
-        elif arg.startswith("--maturity_time="):
-            parsed_args["maturity_time"] = arg.split("--maturity_time=")[1]
-    return parsed_args
-
-# TODO ESTA SERA ELIMINADA
-# Reemplazada por Protocol.reciveParams()   
-def validateArgs(args):
-    #TODO validate arguments, return error
-    return None
+from options import EuropeanOptionPricing, AmericanOptionPricing
+from plotter import Plotter
 
 def main():
-    args = parseArgs(sys.argv[1:])
-    err = validateArgs(args)
-    if err is not None:
-        Protocol.sendError("invalid arguments", err)
-        exit(1)
+    
+    args, err = Protocol.receiveParameters(sys.argv[1:])
+    if err:
+        Protocol.sendError("invalid arguments", args)
+        return 
 
     # prices will get the company's data
     prices = Prices()
@@ -83,7 +30,7 @@ def main():
     # Check if prices loaded the CSV correctly.
     if not prices.isLoaded():
         Protocol.sendError("data not loaded")
-        #exit(100)  TODO
+        return
 
     # Check if data doesn't have any invalid value
     elif not prices.isValidData():
@@ -94,15 +41,16 @@ def main():
         # Otherwise, we can handle this data.
         if not fixed:
             Protocol.sendError("invalid csv format", args["csv"])
-            #exit(101) TODO
+            return 
 
     # Data is valid and is ready to process.
     else:
         Protocol.sendStatus("loaded", args["csv"])
         
         # Plot the prices
-        filename = prices.getPlot()
-        Protocol.sendStatus("plot generated", filename)
+        #filename = prices.getPlot()
+        json_plot, _ = Plotter.timeSeries(prices.data.Date, High=prices.data.High , Low=prices.data.Low, Close=prices.data.Close)
+        Protocol.sendStatus("plot generated", json_plot)
 
         Protocol.sendStatus("setting simulation params")
 
@@ -133,7 +81,7 @@ def main():
         sigma = prices.getVolatility()
         Protocol.sendStatus("using volatility", sigma)
 
-        # option is ...
+        # using the correct option type
         if args["option_type"] == "EU":
             option = EuropeanOptionPricing(S0, K, T, r, sigma, I)
             Protocol.sendStatus("using European Option")
@@ -141,6 +89,7 @@ def main():
             option = AmericanOptionPricing(S0, K, T, r, sigma, I)
             Protocol.sendStatus("using American Option")            
         else:
+            # European is the default option
             Protocol.sendError("wrong option type", args["option_type"])
             option = EuropeanOptionPricing(S0, K, T, r, sigma, I)
             Protocol.sendStatus("using European Option")

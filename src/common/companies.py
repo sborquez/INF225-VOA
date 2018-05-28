@@ -1,19 +1,13 @@
-import json
-from urllib3 import Retry
-
 from protocol import Protocol
 
 try:
+    import json
     import requests
+    from urllib3 import Retry
     from requests.adapters import HTTPAdapter
-except ImportError:
-    Protocol.sendError("Module not installed", "requests")
-    exit(0)
-
-try:
     from bs4 import BeautifulSoup
-except ImportError:
-    Protocol.sendError("Module not installed", "beautifulsoup4")
+except ImportError as err:
+    Protocol.sendError("Module not installed", err.name)
     exit(0)    
 
 def requests_retry_session(retries=3, backoff_factor=0.3, status_forcelist=(500, 502, 504)):
@@ -38,7 +32,8 @@ def get_symbols():
 
     try:
         r = session.get(most_active_url)
-    except Exception:
+    except Exception as err:
+        Protocol.sendError(err)
         return
     else:
         Protocol.sendStatus("Stablished connection")
