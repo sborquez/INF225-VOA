@@ -69,7 +69,6 @@ function parseArguments(arguments_obj)
   const args = new Array();
   for (let arg_name in arguments_obj) {
     args.push("--" + arg_name + "=" + arguments_obj[arg_name]);
-    console.log(arg_name);
   }
   return args;
 }
