@@ -20,12 +20,12 @@ def main():
     if args["download_path"] != None:
         Protocol.sendStatus("starting download", args["code"])
         # Use this CSV file in the load step.
-        args["csv"] =  prices.download(args["code"], args["start"], args["end"], args["download_path"], "Yahoo")
-        Protocol.sendStatus("download ended", args["csv"])
+        args["filepath_data"] =  prices.download(args["code"], args["start"], args["end"], args["download_path"], "Yahoo")
+        Protocol.sendStatus("download ended", args["filepath_data"])
 
     # Load a downloaded CSV file.
-    Protocol.sendStatus("loading csv", args["csv"])
-    prices.load(args["csv"])
+    Protocol.sendStatus("loading csv", args["filepath_data"])
+    prices.load(args["filepath_data"])
 
     # Check if prices loaded the CSV correctly.
     if not prices.isLoaded():
@@ -40,12 +40,12 @@ def main():
 
         # Otherwise, we can handle this data.
         if not fixed:
-            Protocol.sendError("invalid csv format", args["csv"])
+            Protocol.sendError("invalid csv format", args["filepath_data"])
             return 
 
     # Data is valid and is ready to process.
     else:
-        Protocol.sendStatus("loaded", args["csv"])
+        Protocol.sendStatus("loaded", args["filepath_data"])
         
         # Plot the prices
         #filename = prices.getPlot()

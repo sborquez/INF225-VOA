@@ -15,7 +15,7 @@ class Protocol(object):
 
 		# parameter: (type, optional, default, description)		
 		defined_parameters = {\
-			"csv"  :  		 (str, True , None, "path to csv file"),
+			"filepath_data": (str, True , None, "path to csv file"),
 			"download_path": (str, True , None, "path to download file"),
 			"name"  : 	     (str, True, None, "company's name"),
 			"code"  : 		 (str, False, None, "company's code"),
@@ -29,18 +29,19 @@ class Protocol(object):
 		}	
 		
 		# Parse input parameters
-		parsed_params = dict()
+		parsed_params = {key:default for key, (_,_,default,_) in defined_parameters.items()}
 		for param in parameters:
 			if param.startswith("--") and len(param.split("=")) == 2:
 				key, value = param[2:].split("=")
 				parsed_params[key] = value
 			else:
 				return param, True
+		
 
-		# Validate input parameters
+		# Validate input parameter
 		for key, rule in defined_parameters.items():
-			rule_type, rule_null, rule_default, rule_desc = rule
-			value = parsed_params.get(key, rule_default)
+			rule_type, rule_null, _, rule_desc = rule
+			value = parsed_params[key]
 			if value is None and not rule_null:
 				return (key, value, rule_desc), True
 			try:

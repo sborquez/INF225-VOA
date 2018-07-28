@@ -14,7 +14,7 @@ function valorizeFromCSV(callback, args) {
   })
 
   call.onStatus("plot generated", (plot_obj) => {
-    plot_obj = JSON.parse(plot_json);
+    plot_obj = JSON.parse(plot_obj);
   })
 
   call.onEnd(() => {
