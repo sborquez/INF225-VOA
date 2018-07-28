@@ -20,7 +20,7 @@ def main():
     if args["download_path"] != None:
         Protocol.sendStatus("starting download", args["code"])
         # Use this CSV file in the load step.
-        args["csv"] =  prices.download(args["name"], args["code"], args["start"], args["end"], args["download_path"])
+        args["csv"] =  prices.download(args["code"], args["start"], args["end"], args["download_path"], "Yahoo")
         Protocol.sendStatus("download ended", args["csv"])
 
     # Load a downloaded CSV file.

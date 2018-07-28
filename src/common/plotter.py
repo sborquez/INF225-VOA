@@ -47,6 +47,106 @@ class Plotter(object):
         return dumps(plot_data), plot_data
 
     @staticmethod
+    def europeanOption(price, payoff):
+        """
+        var chart = c3.generate({
+            size: {
+                width: 350
+            },
+            data: {
+                columns: [
+                    ['data1', -2]
+                ],
+                type: 'bar',
+                colors: {
+                    data1: '#ff0000',
+                },
+                labels: {
+        //            format: function (v, id, i, j) { return "Default Format"; },
+                    format: {
+                        data1: function (v, id, i, j) { return "$28 (" + v + ")"; },
+                    }
+                }
+            },
+            bar: {
+                width: 200 // this makes bar width 100px
+            },
+            axis: {
+                y: {
+                    max: 2.2,
+                    min: -2.2,
+                    label: 'Payoff [USD]'
+                }
+            },
+            grid: {
+                y: {
+                    lines: [
+                        {value: 0}
+                    ],
+                    show:true
+                }
+            },
+            legend: {
+                show: false
+            }
+        });
+        """
+        pass
+
+    @staticmethod
+    def americanOption(prices, payoffs):
+        """
+var chart = c3.generate({
+            zoom: {
+                enabled: true
+            },
+            data: {
+                x: 'x',
+                columns: [
+                    ['x', '2013-01-01', '2013-01-02', '2013-01-03', '2013-01-04', '2013-01-05', '2013-01-06'],
+                    ['price', 28, 42, 10, 40, 30, -5],
+                    ['payoff', 0, 12, -20, 10, 0, -35]
+                ],
+                types: {
+                    payoff: 'area-step'
+                },
+                axes: {
+                    price: 'y',
+                    payoff: 'y2'
+                },
+                colors: {
+                    payoff: '#ff0000'
+                },
+            },
+            axis: {
+                x: {
+                    type: 'timeseries',
+                    tick: {
+                        format: '%Y-%m-%d'
+                    }
+                },
+                y: {
+                    label: 'Price [USD]'
+                },
+                y2: {
+                    show: true,
+                    label: 'Payoff [USD]'
+                }
+            },
+            grid: {
+                y: {
+                    lines: [
+                        {value: 30, text: 'strike price', axis: 'y', position: 'start'},
+                        {value: 0}
+                    ],
+                    show: true
+                }
+            }
+        });
+        """
+        pass
+
+    @staticmethod
     def dummyPlot():
         plot_data = {
             'bindto': '#prices',        

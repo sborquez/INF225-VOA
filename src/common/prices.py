@@ -1,11 +1,14 @@
 import datetime
 import urllib
 import csv
+import datetime as dt
+import os
 
 from protocol import Protocol
 
 try:
     import matplotlib.pyplot as plt    
+    from pandas_datareader.data import DataReader
     import pandas as pd
     import numpy as np
 except ImportError as err:
@@ -25,9 +28,40 @@ class Prices(object):
         self.__loaded = False
         self.data = None
         self._volatility = None
+        self.source = "Yahoo"
         #self.roll_volatility = None
 
-    def download(self, name, code, start, end, downloadPath):
+    def download(self, code, start, end, downloadPath=None, source='morningstar'):
+        self.source = source
+        if source == "Yahoo":
+            result = self.downloadYahoo(code, start, end, downloadPath)
+            if not result:
+                return self.download(code, start, end, downloadPath)
+            else:
+                return result 
+        else:
+            start = dt.datetime.fromtimestamp(int(start)) if type(start) == str else start
+            if start != None:
+                self.data = DataReader(
+                    code,
+                    data_source=source,
+                    start=start,
+                    end=dt.datetime.today()
+                )
+            else:
+                self.data = DataReader(
+                    code,
+                    data_source=source,
+                    end=dt.datetime.today()
+                )
+            self.__loaded = True
+            if downloadPath != None:
+                filepath = os.path.join(downloadPath,  code + str(int(end)) + '.csv')
+                self.data.to_csv(filepath)
+                return filepath
+            return None
+        
+    def downloadYahoo(self, code, start, end, downloadPath):
         """
         download take arguments and download from Yahoo! the data, save
         them in the given path and returns the csv route.
@@ -88,16 +122,15 @@ class Prices(object):
             f = urllib.request.urlopen(req)
         except urllib.error.URLError as e:
             if hasattr(e,'code'):
-                print (e.code)
+                Protocol.sendError("Downloading from Yahoo failded", e.code)
             if hasattr(e,'reason'):
-                print (e.reason)
+                Protocol.sendError("Downloading from Yahoo failded", e.reason)
             return False
         except urllib.error.HTTPError as e:
             if hasattr(e,'code'):
-                print(e.code)
+                Protocol.sendError("Downloading from Yahoo failded", e.code)                
             if hasattr(e,'reason'):
-                print(e.reason)
-            print('HTTPError!!!')
+                Protocol.sendError("Downloading from Yahoo failded", e.reason)
             return False
 
         #urlopen(req)
@@ -107,7 +140,7 @@ class Prices(object):
         holder = alines.split('\n')
 
         # generates csv filename
-        filename = downloadPath + code + end + '.csv'
+        filename = downloadPath + code + str(int(end)) + '.csv'
 
         # creates csv
         with open(filename, 'w') as csvfile:
@@ -116,7 +149,7 @@ class Prices(object):
             for line in holder:
                 b = line.split(',')
                 filewriter.writerow(b)
-            return filename
+        return filename
 
     def load(self, csv_filepath):
         """
@@ -124,6 +157,7 @@ class Prices(object):
         """
         try:
             self.data = pd.read_csv(csv_filepath)
+            self.source = "Yahoo"
             self.__loaded = True
         except Exception:
             if csv_filepath == "":
@@ -193,7 +227,25 @@ class Prices(object):
         filename = TEMP_DATA_PATH + "plot_" + datetime.datetime.now().strftime("%y%m%d_%H%M%S") + ".png"
         plt.savefig(filename)
         return filename
-    
+        
+    def getPlotDash(self):
+        if self.source.lower() == "yahoo":
+        
+            return {
+                'data': [{
+                    'x': self.data.Date,
+                    'y': self.data.Close
+                }]
+            }
+        elif self.source == "morningstar":
+            return {
+                'data': [{
+                    'x': self.data.index.get_level_values(1),
+                    'y': self.data.Close
+                }]
+            }
+
+        
     def getVolatility(self):
         """
         getVolatility evaluate data and retrives its volatility
