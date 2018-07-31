@@ -54,7 +54,7 @@ class OptionPricing(object):
 
         return prices
 
-    def simulateTrajectories(self, steps=10, T=0, simulations=0):
+    def simulateTrajectories(self, T=0, simulations=0):
         """
         simulateTrajectories generate I's Monte Carlo simulations of the price trajectories from T0 to T using time steps.
         If T is 0 we use the madurity time, if simulations is 0 we use the I.
@@ -66,7 +66,9 @@ class OptionPricing(object):
             simulations = self.I
 
         # T is the vector of times steps, reshaped to a vertical vector.
-        T = np.linspace(0, T, steps + 2).reshape((steps + 2, 1))
+        days = np.ceil(self.maturity_time * 365)
+        T = np.linspace(0, 1, days)*(self.maturity_time)
+        T = T.reshape((int(days), 1))
 
         # Get a matrix of random values X~N(0,1), 
         # it'll be used to generate the Monte Carlo simulations at differents times.
@@ -126,15 +128,21 @@ class AmericanOptionPricing(OptionPricing):
     An American option may be exercised at any time before 
     the expiration date, that is from t in (0,T).
     """
-    def getCallOption(self, steps=10, recalculate=True):
-        T = np.linspace(0, 1, steps+2)*(self.maturity_time)
+    def getCallOption(self, recalculate=True):
+        days = np.ceil(self.maturity_time * 365)
+
+        T = np.linspace(0, 1, days)*(self.maturity_time)
+        print(T)
         if recalculate:
             self.prices = self.simulateTrajectories()
         payoff = np.mean(self.prices, axis=1) - self.strike_price
-        return np.exp(-1.0 * self.riskless_rate * T) * payoff, np.mean(self.prices, axis=1)
+        a=self.riskless_rate * T
+        return np.exp(-1.0 * a) * payoff, np.mean(self.prices, axis=1)
         
-    def getPullOption(self, steps=10, recalculate=True):
-        T = np.linspace(0, 1, steps+2)*(self.maturity_time)
+    def getPullOption(self, recalculate=True):
+        days = np.ceil(self.maturity_time * 365)
+        
+        T = np.linspace(0, 1, days)*(self.maturity_time)
         if recalculate:
             self.prices = self.simulateTrajectories()
         payoff = self.strike_price - np.mean(self.prices, axis=1)
