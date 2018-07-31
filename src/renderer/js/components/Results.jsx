@@ -35,7 +35,17 @@ class Results extends Component {
   }
 
   getEU() {
-    return <span />;
+    const data = this.state.data.EU;
+    if (data) {
+      return (
+        <div>
+          <h4>EU</h4>
+          <span>
+            {data.price}&plusmn;{data.payoff}
+          </span>
+        </div>
+      );
+    }
   }
 
   getUSAPlot() {
@@ -56,8 +66,6 @@ class Results extends Component {
   getTimeSeriesPlot() {
     if (this.state.data.TS) {
       const data = this.state.data.TS;
-
-      console.log(Object.keys(data));
 
       const high = {};
       high.x = data.High.x;
