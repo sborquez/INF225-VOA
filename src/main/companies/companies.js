@@ -1,7 +1,7 @@
 const PythonCall = require("../utils/pythonProtocol");
 
 function getCompaniesSymbols(callback) {
-  const call = new PythonCall("companies.py");
+  const call = new PythonCall("load_companies.py");
 
   call.onResult(companies_list => {
     callback(companies_list);

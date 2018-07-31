@@ -12,9 +12,8 @@ TICKET_FILE = "src/common/data/tickers.csv"
 SIZE = 800
 
 def main():
-    companies = read_csv(os.path.join(os.path.abspath("."), TICKET_FILE), sep=";")[["Ticker", "Name"]].head(SIZE)
-    companies.set_index("Ticker", inplace=True)
-    Protocol.sendResult(json.dumps(companies.to_dict()["Name"]))
+    companies = read_csv(os.path.join(os.path.abspath("."), TICKET_FILE), sep=";")[["symbol", "name"]].head(SIZE)
+    Protocol.sendResult(json.dumps(list(companies.T.to_dict().values())))
 
 if __name__ == '__main__':
     main()
