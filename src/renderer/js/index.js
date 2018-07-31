@@ -1,17 +1,10 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
-const ipc = require("electron").ipcRenderer;
+import App from "./components/App";
+
 const $ = require("./jquery-3.3.1.min");
-
-const remote = require("electron").remote;
-const dialog = remote.dialog;
-
-class App extends Component {
-  render() {
-    return <span>Hello World!</span>;
-  }
-}
+const { ipcRenderer } = require("electron");
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
@@ -41,7 +34,7 @@ function openFile() {
 }
 
 function reloadCompanies() {
-  ipc.send("companies", { force_update: false });
+  ipcRenderer.send("companies", { force_update: false });
 }
 
 $("#local_submit").on("click", () => {
@@ -64,7 +57,7 @@ function fillTable(symbols) {
   table.first().after(html);
 }
 
-ipc.on("companies_ready", (event, symbols_json) => {
+ipcRenderer.on("companies_ready", (event, symbols_json) => {
   const symbols = JSON.parse(symbols_json);
   fillTable(symbols);
 });
