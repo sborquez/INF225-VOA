@@ -1,20 +1,84 @@
 import React, { Component } from "react";
+import Autosuggest from "react-autosuggest";
+import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from "constants";
+
+const { ipcRenderer } = require("electron");
 
 class Companies extends Component {
   constructor() {
     super();
-    this.state = {
-      companies: []
+
+    this.updateCompanies = (event, companies_str) => {
+      const companies = JSON.parse(companies_str);
+      this.setState({
+        companies: companies
+      });
     };
+
+    const getSuggestions = value => {
+      const text = value.trim().toLowerCase();
+      return this.state.companies.filter(company => {
+        const name = company.name.trim().toLowerCase();
+        return name.includes(text);
+      });
+    };
+
+    this.onSuggestionsFetchRequested = ({ value }) => {
+      this.setState({
+        suggestions: getSuggestions(value)
+      });
+    };
+
+    this.onSuggestionsClearRequested = () => {
+      this.setState({
+        suggestions: []
+      });
+    };
+
+    this.onChange = (event, { newValue }) => {
+      this.setState({
+        value: newValue
+      });
+    };
+
+    this.onChange = (event, { newValue }) => {
+      this.setState({
+        value: newValue
+      });
+    };
+
+    this.state = {
+      companies: [],
+      suggestions: [],
+      value: ""
+    };
+
+    ipcRenderer.on("companies_ready", this.updateCompanies);
+    ipcRenderer.send("companies", { force_update: false });
+  }
+
+  getSuggestionValue(value) {
+    return value.name;
   }
 
   render() {
+    const { value, suggestions } = this.state;
+
+    const inputProps = {
+      placeholder: "¿Qué empresa quiere revisar?",
+      value,
+      onChange: this.onChange
+    };
+
     return (
-      <select>
-        {this.state.companies.map(company => {
-          <option value={company.sym}>{company.name}</option>;
-        })}
-      </select>
+      <Autosuggest
+        suggestions={this.state.suggestions}
+        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+        getSuggestionValue={value => value.name}
+        renderSuggestion={suggestion => <div>{suggestion.name}</div>}
+        inputProps={inputProps}
+      />
     );
   }
 }

@@ -46,7 +46,6 @@ $("#remote_submit").on("click", () => {
 });
 
 $("#file_submit").on("click", openFile);
-$(document).ready(reloadCompanies);
 
 function fillTable(companies) {
   const table = $("#companies_table tr");
