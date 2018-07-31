@@ -4,7 +4,8 @@ import ReactDOM from "react-dom";
 import App from "./components/App";
 
 const $ = require("./jquery-3.3.1.min");
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, remote } = require("electron");
+const dialog = remote.dialog;
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
@@ -38,11 +39,11 @@ function reloadCompanies() {
 }
 
 $("#local_submit").on("click", () => {
-  ipc.send("valorize local", valorizeForm());
+  ipcRenderer.send("valorize local", valorizeForm());
 });
 
 $("#remote_submit").on("click", () => {
-  ipc.send("valorize remote", valorizeForm());
+  ipcRenderer.send("valorize remote", valorizeForm());
 });
 
 $("#file_submit").on("click", openFile);

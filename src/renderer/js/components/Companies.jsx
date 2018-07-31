@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Autosuggest from "react-autosuggest";
-import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from "constants";
 
 const { ipcRenderer } = require("electron");
 
@@ -76,7 +75,7 @@ class Companies extends Component {
         onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.onSuggestionsClearRequested}
         getSuggestionValue={value => value.name}
-        renderSuggestion={suggestion => <div>{suggestion.name}</div>}
+        renderSuggestion={suggestion => <span>{suggestion.name}</span>}
         inputProps={inputProps}
       />
     );

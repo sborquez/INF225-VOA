@@ -5,7 +5,7 @@ const rendererDir = path.join(__dirname, "../renderer");
 
 function valorizeLocal(callback, args) {
   let csv_path;
-  let plot_obj;
+  const plot = {};
 
   const call = new PythonCall("calculate.py", args);
 
@@ -13,12 +13,16 @@ function valorizeLocal(callback, args) {
     csv_path = args.filepath_data;
   });
 
-  call.onStatus("plot generated", plot_obj => {
-    plot_obj = JSON.parse(plot_obj);
+  call.onStatus("plot generated", result => {
+    plot.TS = JSON.parse(result);
+  });
+
+  call.onResult(result => {
+    plot.res = JSON.parse(result);
   });
 
   call.onEnd(() => {
-    callback(plot_obj, csv_path);
+    callback(plot, csv_path);
   });
 
   call.start();

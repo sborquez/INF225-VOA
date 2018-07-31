@@ -80,10 +80,11 @@ function getDateParams(maturity_time) {
   return res;
 }
 
-function showResults(plot_obj, csv_path) {
+function showResults(plots, csv) {
   mainWindow.webContents.send("results", {
-    plot: plot_obj,
-    csv: csv_path
+    res: plots.res,
+    TS: plots.TS,
+    csv: csv
   });
 }
 

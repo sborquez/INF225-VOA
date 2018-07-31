@@ -1,22 +1,87 @@
 import React, { Component } from "react";
 import Plot from "react-plotly.js";
 
+const { ipcRenderer } = require("electron");
+
 class Results extends Component {
+  constructor() {
+    super();
+    ipcRenderer.on("results", (event, results) => {
+      const { TS, res, csv } = results;
+
+      const new_data = {
+        USA: undefined,
+        EU: undefined,
+        TS: undefined
+      };
+
+      if (res.type === "USA") new_data.USA = res.result.plot_data;
+      if (res.type === "EU") new_data.EU = res.result;
+      if (TS) new_data.TS = TS;
+      this.setState({ data: new_data });
+    });
+
+    this.state = {
+      data: {
+        USA: undefined,
+        EU: undefined,
+        TS: undefined
+      }
+    };
+
+    this.getTimeSeriesPlot = this.getTimeSeriesPlot.bind(this);
+    this.getUSAPlot = this.getUSAPlot.bind(this);
+    this.getEU = this.getEU.bind(this);
+  }
+
+  getEU() {
+    return <span />;
+  }
+
+  getUSAPlot() {
+    if (this.state.data.USA) {
+      const data = this.state.data.USA;
+
+      const prices = {};
+      prices.x = data.prices.x;
+      prices.y = data.prices.y;
+      prices.type = "scatter";
+
+      return <Plot data={[prices]} layout={{ title: "Americana" }} />;
+    } else {
+      return <span>Sin resultados aun (Americana)</span>;
+    }
+  }
+
+  getTimeSeriesPlot() {
+    if (this.state.data.TS) {
+      const data = this.state.data.TS;
+
+      const high = {};
+      high.x = data.High.x;
+      high.y = data.High.y;
+      high.type = "scatter";
+      high.name = "High";
+
+      const low = {};
+      low.x = data.Low.x;
+      low.y = data.Low.y;
+      low.type = "scatter";
+      low.name = "Low";
+
+      return <Plot data={[high, low]} layout={{ title: "Time Series" }} />;
+    } else {
+      return <span>Sin resultados aun (Time Series)</span>;
+    }
+  }
+
   render() {
     return (
-      <Plot
-        data={[
-          {
-            x: [1, 2, 3],
-            y: [2, 6, 3],
-            type: "scatter",
-            mode: "lines+points",
-            marker: { color: "red" }
-          },
-          { type: "bar", x: [1, 2, 3], y: [2, 5, 3] }
-        ]}
-        layout={{ width: 320, height: 240, title: "A Fancy Plot" }}
-      />
+      <div>
+        {this.getTimeSeriesPlot()}
+        {this.getUSAPlot()}
+        {this.getEU()}
+      </div>
     );
   }
 }
