@@ -13,37 +13,13 @@ class Plotter(object):
         timeSeries use dates as x axis and uses prices as y values.
         dates and values are pd.Series
         """
-        columns = [['Date'] + list(dates)]
-        for name, value in prices.items():
-            columns.append([name] + list(value))
-        
-        plot_data = {
-            'bindto': '#prices',
-            'data': {
-                'x':'Date',
-                'columns' : columns
-            }, 
-            'axis': {
-                'x': {
-                    'type': 'timeseries',
-                    'tick': {
-                        'format': '%Y-%m-%d'
-                    }
-
-                },
-                'y': {
-                    'label': 'USD'
-                }
-            },
-            'grid': {
-                'y': {
-                    'show': 'true'
-                }
-            },
-            'zoom' : {
-                'enabled': 'true'
+        plot_data = {}
+        x = list(dates)
+        for name, values in prices.items():
+            plot_data[name] = {
+                "x" : x,
+                "y" : list(values)
             }
-        }
         return dumps(plot_data), plot_data
 
     @staticmethod
@@ -174,4 +150,4 @@ if __name__ == '__main__':
     netflix = Prices()
     netflix.load("../../test/data/NFLX.csv")
     p1, d1 = Plotter.timeSeries(netflix.data.Date, High=netflix.data.High , Low=netflix.data.Low, Close=netflix.data.Close)
-    p2, d2 = Plotter.dummyPlot()
+    print(p1)
