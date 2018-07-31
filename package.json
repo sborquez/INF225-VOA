@@ -2,11 +2,10 @@
   "name": "inf225-voa",
   "productName": "Valorización de Opciones y Acciones",
   "description": "",
-  "repository" :
-    {
-      "type" : "git",
-      "url" : "https://github.com/sborquez/INF225-VOA.git"
-    },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sborquez/INF225-VOA.git"
+  },
   "version": "0.0.0",
   "license": "MIT",
   "main": "src/main/main.js",
@@ -24,6 +23,7 @@
     "css-loader": "^1.0.0",
     "electron": "^1.8.4",
     "electron-packager": "^12.1.0",
+    "electron-prebuilt-compile": "^2.0.4",
     "electron-rebuild": "^1.8.1",
     "less": "^3.8.0",
     "less-loader": "^4.1.0",

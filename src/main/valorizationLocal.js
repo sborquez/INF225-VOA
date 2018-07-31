@@ -1,9 +1,9 @@
-const path = require('path');
-const PythonCall = require('./utils/pythonProtocol');
+const path = require("path");
+const PythonCall = require("./utils/pythonProtocol");
 
-const rendererDir = path.join(__dirname, '../renderer');
+const rendererDir = path.join(__dirname, "../renderer");
 
-function valorizeFromCSV(callback, args) {
+function valorizeLocal(callback, args) {
   let csv_path;
   let plot_obj;
 
@@ -11,11 +11,11 @@ function valorizeFromCSV(callback, args) {
 
   call.onStatus("loaded", () => {
     csv_path = args.filepath_data;
-  })
+  });
 
-  call.onStatus("plot generated", (plot_obj) => {
+  call.onStatus("plot generated", plot_obj => {
     plot_obj = JSON.parse(plot_obj);
-  })
+  });
 
   call.onEnd(() => {
     callback(plot_obj, csv_path);
@@ -24,4 +24,4 @@ function valorizeFromCSV(callback, args) {
   call.start();
 }
 
-module.exports = valorizeFromCSV;
+export default valorizeLocal;
