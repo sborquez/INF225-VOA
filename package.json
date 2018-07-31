@@ -2,6 +2,11 @@
   "name": "inf225-voa",
   "productName": "Valorización de Opciones y Acciones",
   "description": "",
+  "repository" :
+    {
+      "type" : "git",
+      "url" : "https://github.com/sborquez/INF225-VOA.git"
+    },
   "version": "0.0.0",
   "license": "MIT",
   "main": "src/main/main.js",
