@@ -132,7 +132,6 @@ class AmericanOptionPricing(OptionPricing):
         days = np.ceil(self.maturity_time * 365)
 
         T = np.linspace(0, 1, days)*(self.maturity_time)
-        print(T)
         if recalculate:
             self.prices = self.simulateTrajectories()
         payoff = np.mean(self.prices, axis=1) - self.strike_price
