@@ -1,9 +1,14 @@
-import ReactDOM from "react-dom";
 import React, { Component } from "react";
+import Companies from "./Companies";
+import Results from "./Results";
 
 class App extends Component {
   render() {
-    return <span>Hello World!</span>;
+    return (
+      <div>
+        <Results />
+      </div>
+    );
   }
 }
 

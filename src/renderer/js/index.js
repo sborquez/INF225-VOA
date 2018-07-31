@@ -48,12 +48,15 @@ $("#remote_submit").on("click", () => {
 $("#file_submit").on("click", openFile);
 $(document).ready(reloadCompanies);
 
-function fillTable(symbols) {
+function fillTable(companies) {
   const table = $("#companies_table tr");
   table.not(":first").remove();
+  console.log(companies);
   let html = "";
-  for (let sym in symbols)
-    html += "<tr><td>" + sym + "</td><td>" + symbols[sym] + "</td></tr>";
+  for (let company of companies) {
+    html +=
+      "<tr><td>" + company.symbol + "</td><td>" + company.name + "</td></tr>";
+  }
   table.first().after(html);
 }
 
