@@ -1,12 +1,17 @@
-const electron = require('electron');
-const path = require('path');
-const url = require('url');
+const electron = require("electron");
+const path = require("path");
+const url = require("url");
+
+import valorizeLocal from "./valorizationLocal";
+import valorizeRemote from "./valorizationRemote";
+
+import getCompaniesSymbols from "./companies/companies";
 
 /*
  *  electron initialization
  */
 
-const rendererDir = path.join(__dirname, '../renderer');
+const rendererDir = path.join(__dirname, "../renderer");
 
 const app = electron.app;
 const ipc = electron.ipcMain;
@@ -23,32 +28,34 @@ function createWindow() {
     resizable: false
   });
 
-  mainWindow.loadURL(url.format({
-    pathname: path.join(rendererDir, 'html/index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
+  mainWindow.loadURL(
+    url.format({
+      pathname: path.join(rendererDir, "html/index.html"),
+      protocol: "file:",
+      slashes: true
+    })
+  );
 
   //mainWindow.webContents.openDevTools()
 
-  mainWindow.on('closed', function () {
-    mainWindow = null
-  })
+  mainWindow.on("closed", function() {
+    mainWindow = null;
+  });
 }
 
-app.on('ready', createWindow)
+app.on("ready", createWindow);
 
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') {
-    app.quit()
+app.on("window-all-closed", function() {
+  if (process.platform !== "darwin") {
+    app.quit();
   }
-})
+});
 
-app.on('activate', function () {
+app.on("activate", function() {
   if (mainWindow === null) {
-    createWindow()
+    createWindow();
   }
-})
+});
 
 /*
  *  global data
@@ -59,10 +66,6 @@ let companies = null;
 /*
  *  application functionality
  */
-
-valorizeLocal = require('./valorizationLocal');
-valorizeRemote = require('./valorizationRemote');
-getCompaniesSymbols = require('./companies/companies');
 
 function getDateParams(maturity_time) {
   const res = {};
@@ -79,9 +82,9 @@ function getDateParams(maturity_time) {
 
 function showResults(plot_obj, csv_path) {
   mainWindow.webContents.send("results", {
-    "plot": plot_obj,
-    "csv": csv_path
-  })
+    plot: plot_obj,
+    csv: csv_path
+  });
 }
 
 ipc.on("valorize local", (event, args) => {
@@ -104,11 +107,11 @@ ipc.on("valorize remote", (event, args) => {
 
 ipc.on("companies", (event, args) => {
   if (companies === null || args.force_update) {
-    getCompaniesSymbols((response) => {
+    getCompaniesSymbols(response => {
       companies = response;
       event.sender.send("companies_ready", companies);
     });
   } else {
     event.sender.send("companies_ready", companies);
   }
-})
+});
