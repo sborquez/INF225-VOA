@@ -33,6 +33,7 @@ class Prices(object):
 
     def download(self, code, start, end, downloadPath=None, source='morningstar'):
         self.source = source
+        Protocol.sendStatus("Data source", source)
         if source == "Yahoo":
             result = self.downloadYahoo(code, start, end, downloadPath)
             if not result:

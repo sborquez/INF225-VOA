@@ -1,10 +1,13 @@
 import sys
+import json
 from time import sleep
 
 from protocol import Protocol
 from prices import Prices
 from options import EuropeanOptionPricing, AmericanOptionPricing
 from plotter import Plotter
+
+
 
 def main():
     
@@ -93,6 +96,7 @@ def main():
             Protocol.sendError("wrong option type", args["option_type"])
             option = EuropeanOptionPricing(S0, K, T, r, sigma, I)
             Protocol.sendStatus("using European Option")
+            args["option_type"] = "EU"
 
         # TODO ONLY BUY CALL
         Protocol.sendStatus("getting call option")
@@ -107,7 +111,27 @@ def main():
             result = option.getPullOption()
         """
         Protocol.sendStatus("simulation ended")
-        Protocol.sendResult(results)
+
+        # Build result
+
+
+        if args["option_type"] == "EU":
+            result_data = {
+                "type" : "EU",
+                "result" : {
+                    "payoff": results[0],
+                    "price": results[1],
+                }
+            } 
+        elif args["option_type"] == "USA":
+            result_data = {
+                "type" : "USA",
+                "result" : {
+                    "plot_data" :  Plotter.americanOption(list(results[1]),list(results[0]))[1]  
+                }
+            } 
+
+        Protocol.sendResult(json.dumps(result_data))
         sys.stdout.flush()
 
 if __name__ == '__main__':
