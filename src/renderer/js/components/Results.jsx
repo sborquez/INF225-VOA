@@ -57,11 +57,19 @@ class Results extends Component {
     if (this.state.data.TS) {
       const data = this.state.data.TS;
 
+      console.log(Object.keys(data));
+
       const high = {};
       high.x = data.High.x;
       high.y = data.High.y;
       high.type = "scatter";
       high.name = "High";
+
+      const close = {};
+      close.x = data.Close.x;
+      close.y = data.Close.y;
+      close.type = "scatter";
+      close.name = "Close";
 
       const low = {};
       low.x = data.Low.x;
@@ -69,7 +77,9 @@ class Results extends Component {
       low.type = "scatter";
       low.name = "Low";
 
-      return <Plot data={[high, low]} layout={{ title: "Time Series" }} />;
+      return (
+        <Plot data={[high, close, low]} layout={{ title: "Time Series" }} />
+      );
     } else {
       return <span>Sin resultados aun (Time Series)</span>;
     }
