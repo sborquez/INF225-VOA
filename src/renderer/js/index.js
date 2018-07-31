@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
 import App from "./components/App";
+import Companies from "./components/Companies";
 
 const $ = require("./jquery-3.3.1.min");
 const { ipcRenderer, remote } = require("electron");
 const dialog = remote.dialog;
 
 ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<Companies />, document.getElementById("companies"));
 
 function valorizeForm() {
   const formData = $("form").serializeArray();

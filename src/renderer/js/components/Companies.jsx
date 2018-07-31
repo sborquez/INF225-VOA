@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Autosuggest from "react-autosuggest";
 
 const { ipcRenderer } = require("electron");
 
@@ -14,70 +13,57 @@ class Companies extends Component {
       });
     };
 
-    const getSuggestions = value => {
-      const text = value.trim().toLowerCase();
-      return this.state.companies.filter(company => {
+    this.updateSuggestions = () => {
+      const text = this.state.search.trim().toLowerCase();
+      const suggestions = this.state.companies.filter(company => {
         const name = company.name.trim().toLowerCase();
         return name.includes(text);
       });
-    };
-
-    this.onSuggestionsFetchRequested = ({ value }) => {
       this.setState({
-        suggestions: getSuggestions(value)
-      });
-    };
-
-    this.onSuggestionsClearRequested = () => {
-      this.setState({
-        suggestions: []
-      });
-    };
-
-    this.onChange = (event, { newValue }) => {
-      this.setState({
-        value: newValue
-      });
-    };
-
-    this.onChange = (event, { newValue }) => {
-      this.setState({
-        value: newValue
+        suggestions: suggestions
       });
     };
 
     this.state = {
       companies: [],
       suggestions: [],
-      value: ""
+      search: ""
     };
+
+    this.handleChange = this.handleChange.bind(this);
 
     ipcRenderer.on("companies_ready", this.updateCompanies);
     ipcRenderer.send("companies", { force_update: false });
   }
 
-  getSuggestionValue(value) {
-    return value.name;
+  handleChange(event) {
+    this.setState({
+      search: event.target.value
+    });
+    this.updateSuggestions();
   }
 
   render() {
-    const { value, suggestions } = this.state;
-
-    const inputProps = {
-      placeholder: "¿Qué empresa quiere revisar?",
-      value,
-      onChange: this.onChange
-    };
-
     return (
-      <Autosuggest
-        suggestions={this.state.suggestions}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        getSuggestionValue={value => value.name}
-        renderSuggestion={suggestion => <span>{suggestion.name}</span>}
-        inputProps={inputProps}
-      />
+      <div>
+        <input
+          type="text"
+          value={this.state.search}
+          onChange={this.handleChange}
+        />
+        <table id="companies_table">
+          <tr>
+            <th>Symbol</th>
+            <th>Name</th>
+          </tr>
+          {this.state.suggestions.map(company => {
+            <tr>
+              <td>company.symbol</td>
+              <td>company.name</td>
+            </tr>;
+          })}
+        </table>
+      </div>
     );
   }
 }
