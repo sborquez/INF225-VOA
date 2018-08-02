@@ -41,14 +41,9 @@ class Results extends Component {
         <div>
           <h4>EU</h4>
           <span>
-            <b>
-            {data.price}
-            </b>
-
+            <b>{data.price}</b>
           </span>
-          <span style={{padding: 10}}>
-            {data.payoff}
-          </span>
+          <span style={{ padding: 10 }}>{data.payoff}</span>
         </div>
       );
     }

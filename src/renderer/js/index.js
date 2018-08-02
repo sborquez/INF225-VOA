@@ -62,7 +62,9 @@ function fillTable(companies) {
   table.first().after(html);
 }
 
+/*
 ipcRenderer.on("companies_ready", (event, symbols_json) => {
   const symbols = JSON.parse(symbols_json);
   fillTable(symbols);
 });
+*/

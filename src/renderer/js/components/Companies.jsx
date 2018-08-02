@@ -6,21 +6,23 @@ class Companies extends Component {
   constructor() {
     super();
 
+    this.getSuggestions = search => {
+      const text = search.trim().toLowerCase();
+      const suggestions = this.state.companies.filter(company => {
+        const name = company.name.trim().toLowerCase();
+        const sym = company.symbol.trim().toLowerCase();
+        return name.includes(text) || sym.includes(text);
+      });
+      return suggestions;
+    };
+
     this.updateCompanies = (event, companies_str) => {
       const companies = JSON.parse(companies_str);
       this.setState({
         companies: companies
       });
-    };
-
-    this.updateSuggestions = () => {
-      const text = this.state.search.trim().toLowerCase();
-      const suggestions = this.state.companies.filter(company => {
-        const name = company.name.trim().toLowerCase();
-        return name.includes(text);
-      });
       this.setState({
-        suggestions: suggestions
+        suggestions: this.getSuggestions(this.state.search)
       });
     };
 
@@ -38,9 +40,9 @@ class Companies extends Component {
 
   handleChange(event) {
     this.setState({
-      search: event.target.value
+      search: event.target.value,
+      suggestions: this.getSuggestions(event.target.value)
     });
-    this.updateSuggestions();
   }
 
   render() {
@@ -52,16 +54,20 @@ class Companies extends Component {
           onChange={this.handleChange}
         />
         <table id="companies_table">
-          <tr>
-            <th>Symbol</th>
-            <th>Name</th>
-          </tr>
-          {this.state.suggestions.map(company => {
+          <tbody>
             <tr>
-              <td>company.symbol</td>
-              <td>company.name</td>
-            </tr>;
-          })}
+              <th>Symbol</th>
+              <th>Name</th>
+            </tr>
+            {this.state.suggestions.map(company => {
+              return (
+                <tr>
+                  <td>{company.symbol}</td>
+                  <td>{company.name}</td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
     );
