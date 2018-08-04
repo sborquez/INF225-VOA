@@ -62,6 +62,7 @@ out/
 
 # Python cache
 src/common/__pycache__/
+*.pyc
 
 # Generated plots
 plot_*.png

@@ -1,53 +1,27 @@
-const path = require('path');
-const PythonShell = require("python-shell");
+const path = require("path");
+const PythonCall = require("./utils/pythonProtocol");
+const rendererDir = path.join(__dirname, "../renderer");
 
-const rendererDir = path.join(__dirname, '../renderer');
+function valorizeRemote(callback, args, download_path) {
+  let csv_path;
+  let plot_obj;
 
-/* valorizeFromCloud debera definir los argumentos necesarios
- * para llamar al script de python para descargar y cargar desde una BD.
- * Luego, envia y recibe los mensajes de estado (STATUS) del script
- * para ir mostrando el avance al usuario
- */
+  args.download_path = download_path;
+  const call = new PythonCall("calculate.py", args);
 
-function valorizeFromCloud(event, win, download_path, action_code, action_name, r_value, option_type, start, end)
-{
-  const options = {
-    mode: "text",
-    scriptPath: path.join(__dirname, "../common"),
-    pythonOptions: ['-u'],
-    args: ["--download_path=" + download_path, "--code=" + action_code, "--name="+action_name, "--r="+r_value, "--type="+option_type, "--start="+start, "--end="+end]    
-  }
-  var shell =  new PythonShell('calculate.py', options)
-
-
-  shell.on('message', function (message) {
-    console.log("[python]: " + message);
-    
-    const parsed = message.split("\t");
-    let csv_path;
-
-    if (parsed[0].localeCompare("STATUS") == 0) {
-      if (parsed[1].localeCompare("Cargado") == 0) {
-        win.loadURL(path.join(rendererDir, 'html/results.html'));
-        csv_path = path.join(__dirname, "./../../", parsed[2]);
-      } else if (parsed[1].localeCompare("Grafico generado") == 0) {
-        plot_path = path.join(__dirname, "./../../", parsed[2]);
-        event.sender.send("plot generated", plot_path);
-        event.sender.send("csv loaded", csv_path);
-      } else {
-        console.log(parsed[1]);
-      }
-    } else if (parsed[0].localeCompare("ERROR") == 0) {
-      console.error(parsed[1]);
-    }
+  call.onStatus("loaded", rel_csv_path => {
+    csv_path = path.join(__dirname, "./../../", rel_csv_path);
   });
 
-  shell.end(function (err,code,signal) {
-    // Esto ocurre al finalizar el script de python
-    if (err) throw err;
-    console.log('The exit code was: ' + code);
-    console.log('The exit signal was: ' + signal);
-    console.log('finished');
+  call.onStatus("plot generated", plot_json => {
+    plot_obj = JSON.parse(plot_json);
   });
+
+  call.onEnd(() => {
+    callback(plot_obj, csv_path);
+  });
+
+  call.start();
 }
-module.exports = valorizeFromCloud;
+
+export default valorizeRemote;

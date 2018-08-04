@@ -2,6 +2,9 @@
 
 Los siguientes mensajes son enviados desde python a electron utilizando simplemente prints
 Cada mensaje lleva 3 o 2 argumentos separados por '\\t'.
+
+Para abstraernos del print usaremos la clase Protocol, esta puede enviar tres tipos de mensajes
+
 ### Mensajes de estado 
 Son mensajes que indican el avance que lleva el script de python en calcular el resultado
 
@@ -9,7 +12,7 @@ Son mensajes que indican el avance que lleva el script de python en calcular el 
 
 #### Ejemplo
 ```python
-print("STATUS", "Cargando CSV", args["csv"], sep="\t")
+Protocol.sendStatus("Cargando CSV", args["csv"])
 ```
 ### Mensajes de error
 Son mensajes enviados al encontrarse con errores en los datos o calculos
@@ -18,7 +21,7 @@ Son mensajes enviados al encontrarse con errores en los datos o calculos
 
 #### Ejemplo
 ```python
-print("ERROR", "Formato del CSV invalido", args["csv"], sep="\t")
+Protocol.sendError("Formato del CSV invalido", args["csv"])
 ```
 
 ### Mensaje de Resultado
@@ -28,5 +31,5 @@ Informa un resultado.
 #### Ejemplo
 
 ```python
-    print("RESULT", value, sep="\t")
+Protocol.sendResult(value)
 ```

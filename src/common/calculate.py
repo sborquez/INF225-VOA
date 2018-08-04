@@ -1,86 +1,137 @@
 import sys
+import json
 from time import sleep
-from valoriser import Valoriser
 
-def parseArgs(args):
-    new_args = {
-        "csv"  :  None,
-        "download_path": None,
-        "name"  : None,
-        "code"  : None,
-        "r": None,
-        "type": None,
-        "start": None,
-        "end":  None #one year #TODO cambia para el perido pedido por usario
-        }
-    for arg in args:
-        if arg.startswith("--csv="):
-            new_args["csv"] = arg.split("--csv=")[1]
-        elif arg.startswith("--code="):
-            new_args["code"] = arg.split("--code=")[1]
-        elif arg.startswith("--name="):
-            new_args["name"] = arg.split("--name=")[1]
-        elif arg.startswith("--r="):
-            new_args["r"] = arg.split("--r=")[1]
-        elif arg.startswith("--type="):
-            new_args["type"] = arg.split("--type=")[1]
-        elif arg.startswith("--start="):
-            new_args["start"] = arg.split("--start=")[1]
-        elif arg.startswith("--end="):
-            new_args["end"] = arg.split("--end=")[1]
-        elif arg.startswith("--download_path="):
-            new_args["download_path"] = arg.split("--download_path=")[1]
-        #TODO agregar otros argumentos para la descarga, numero de simulaciones,...
-    return new_args
+from protocol import Protocol
+from prices import Prices
+from options import EuropeanOptionPricing, AmericanOptionPricing
+from plotter import Plotter
 
-def validateArgs(args):
-    #TODO validar argumetos, retornar error
-    return None
+
 
 def main():
-    args = parseArgs(sys.argv[1:])
-    err = validateArgs(args)
-    if err is not None:
-        print("ERROR","argumentos invalidos", err, sep="\t")
-        return exit(1)
+    
+    args, err = Protocol.receiveParameters(sys.argv[1:])
+    if err:
+        Protocol.sendError("invalid arguments", args)
+        return 
 
-    # Hacer diferentes cosas segun los argumentos dados
-    valoriser = Valoriser()
+    # prices will get the company's data
+    prices = Prices()
 
-    #TODO Descargar CSV
+    # Enter only if we will pricing with remote data
     if args["download_path"] != None:
-        print("STATUS", "Comenzando descarga", args["name"])        
-        args["csv"] =  valoriser.download(args["name"], args["code"], args["start"], args["end"], args["download_path"])
-        print("STATUS", "Descarga finalizada", args["csv"])        
+        Protocol.sendStatus("starting download", args["code"])
+        # Use this CSV file in the load step.
+        args["filepath_data"] =  prices.download(args["code"], args["start"], args["end"], args["download_path"], "Yahoo")
+        Protocol.sendStatus("download ended", args["filepath_data"])
 
-    # Cargar CSV
-    print("STATUS", "Cargando CSV", args["csv"])
-    valoriser.load(args["csv"])
-    if not valoriser.isLoaded():
-        print("ERROR", "Datos no cargados", None)
-        #exit(100)  TODO
-    elif not valoriser.isValidData():
-        print("STATUS", "Limpiando datos", None)    
-        fixed = valoriser.cleanData()
+    # Load a downloaded CSV file.
+    Protocol.sendStatus("loading csv", args["filepath_data"])
+    prices.load(args["filepath_data"])
+
+    # Check if prices loaded the CSV correctly.
+    if not prices.isLoaded():
+        Protocol.sendError("data not loaded")
+        return
+
+    # Check if data doesn't have any invalid value
+    elif not prices.isValidData():
+        Protocol.sendStatus("cleaning data")
+        # If there are any wrong value, try to fix it.
+        fixed = prices.cleanData()
+
+        # Otherwise, we can handle this data.
         if not fixed:
-            print("ERROR", "Formato del CSV invalido", args["csv"], sep="\t")
-            #exit(101) TODO
+            Protocol.sendError("invalid csv format", args["filepath_data"])
+            return 
+
+    # Data is valid and is ready to process.
     else:
-        # Evaluar
-        print("STATUS", "Cargado", args["csv"], sep="\t")
-        filename = valoriser.generatePlot()
-        print("STATUS", "Grafico generado", filename, sep="\t")
-
-        # Variables del calculo
-        r = args["r"]
-        option = args["type"]
-        print("STATUS", "Variables de simulacion", (r, option), sep="\t")
-        print("STATUS", "Comenzando a simulacion", None, sep="\t")
+        Protocol.sendStatus("loaded", args["filepath_data"])
         
-        value = valoriser.eval(r, option)
-        print("STATUS", "Simulacion terminada", value, sep="\t")
-        print("RESULT", value, sep="\t")
+        # Plot the prices
+        #filename = prices.getPlot()
+        json_plot, _ = Plotter.timeSeries(prices.data.Date, High=prices.data.High , Low=prices.data.Low, Close=prices.data.Close)
+        Protocol.sendStatus("plot generated", json_plot)
 
+        Protocol.sendStatus("setting simulation params")
+
+        # Initial price
+        S0 = prices.getLastPrice()
+        Protocol.sendStatus("setting initial price", S0)
+
+        # Strike price
+        K = float(args["strike_price"])
+        Protocol.sendStatus("setting strike price", K)
+
+        # Maturity time
+        T = float(args["maturity_time"])
+        Protocol.sendStatus("setting maturity time", T)
+        
+        # Simulations
+        I = int(args["simulations"])
+        Protocol.sendStatus("setting Monte Carlo simulations", I)
+        
+        # Riskless rate
+        r = float(args["r"])
+        Protocol.sendStatus("setting riskless rate", r)
+        
+        # Here we will price the option
+        Protocol.sendStatus("starting simulation")
+        
+        # Calculate Volatility
+        sigma = prices.getVolatility()
+        Protocol.sendStatus("using volatility", sigma)
+
+        # using the correct option type
+        if args["option_type"] == "EU":
+            option = EuropeanOptionPricing(S0, K, T, r, sigma, I)
+            Protocol.sendStatus("using European Option")
+        elif args["option_type"] == "USA":
+            option = AmericanOptionPricing(S0, K, T, r, sigma, I)
+            Protocol.sendStatus("using American Option")            
+        else:
+            # European is the default option
+            Protocol.sendError("wrong option type", args["option_type"])
+            option = EuropeanOptionPricing(S0, K, T, r, sigma, I)
+            Protocol.sendStatus("using European Option")
+            args["option_type"] = "EU"
+
+        # TODO ONLY BUY CALL
+        Protocol.sendStatus("getting call option")
+        results = option.getCallOption()
+        """
+        if args["option"] == "call":
+            Protocol.sendStatus("getting call option")        
+            result = option.getCallOption()
+            
+        elif args["option"] == "pull":
+            Protocol.sendStatus("getting pull option")        
+            result = option.getPullOption()
+        """
+        Protocol.sendStatus("simulation ended")
+
+        # Build result
+
+
+        if args["option_type"] == "EU":
+            result_data = {
+                "type" : "EU",
+                "result" : {
+                    "payoff": results[0],
+                    "price": results[1],
+                }
+            } 
+        elif args["option_type"] == "USA":
+            result_data = {
+                "type" : "USA",
+                "result" : {
+                    "plot_data" :  Plotter.americanOption(list(results[1]),list(results[0]))[1]  
+                }
+            } 
+
+        Protocol.sendResult(json.dumps(result_data))
         sys.stdout.flush()
 
 if __name__ == '__main__':

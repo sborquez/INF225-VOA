@@ -1,44 +1,53 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../css/main.css">
-  </head>
-  <body>
-    <div id="companies">
-      <table id="companies_table">
-        <tr>
-            <th>Symbol</th>
-            <th>Name</th>
-        </tr>
-      </table>
-    </div>
-    <div id="valorize">
-      <form id="main_form">
-        <label>Nombre de la Acción: </label>
-        <input name="action_name" type="text" placeholder="OPCIONAL">
-        <label>Código de la Acción: </label>
-        <input name="action_code" type="text" placeholder="GE">
-        <label>r: </label>
-        <input name="r_value" type="text" placeholder="OPCIONAL">
-        <label>Tipo: </label>
-        <select name="option_type">
-          <option value="europea">Europea</option>
-          <option value="americana">Americana</option>
-        </select>
-        <label>Inicio:</label>
-        <input name="start" type="date">
-        <label>Fin:</label>
-        <input name="end" type="date">
-        <label>Ruta del archivo csv: </label>
-        <button type="button" id="file_submit">Elegir archivo...</button>
-        <input id="data_input" name="filepath_data" type="hidden">
-        <button type="button" id="local_submit">Valorizar Archivo</button>
-        <button type="button" id="remote_submit">Valorizar de Internet</button>
-      </form>
-    </div>
-    <script>
-      require("../js/renderer");
-    </script>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="../css/main.css">
+</head>
+
+<body>
+  <div id="companies">
+
+  </div>
+  <div id="valorize">
+    <form id="main_form">
+      <label>Nombre de la Acción: </label>
+      <input name="name" type="text" placeholder="...">
+
+      <label>Código de la Acción: </label>
+      <input name="code" type="text" placeholder="...">
+
+      <label>Tasa Libre de Riesgo: </label>
+      <input name="r" type="text" placeholder="r" value="0.05">
+
+      <label>Precio de compra</label>
+      <input name="strike_price" type="number" placeholder="..." value="30">
+
+      <label>Tiempo de Madurez</label>
+      <input name="maturity_time" type="date" placeholder="..." value="2019-01-01">
+
+      <label>No. de simulaciones</label>
+      <input name="simulations" type="number" value=1000>
+
+      <label>Tipo: </label>
+      <select name="option_type">
+        <option value="EU">Europea</option>
+        <option value="USA">Americana</option>
+      </select>
+
+      <label>Ruta del archivo csv: </label>
+      <button type="button" id="file_submit">Elegir archivo...</button>
+      <input id="data_input" name="filepath_data" type="hidden">
+      <button type="button" id="local_submit">Valorizar Archivo</button>
+      <button type="button" id="remote_submit">Valorizar de Internet</button>
+    </form>
+  </div>
+  <div id="prices"></div>
+  <div id="root"></div>
+  <script>
+    require("../js/index");
+  </script>
+</body>
+
 </html>
