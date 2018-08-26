@@ -29,46 +29,100 @@ class Companies extends Component {
     this.state = {
       companies: [],
       suggestions: [],
-      search: ""
+      search: "",
+      listFocused: false,
+      currFocus: -1
     };
-
-    this.handleChange = this.handleChange.bind(this);
 
     ipcRenderer.on("companies_ready", this.updateCompanies);
     ipcRenderer.send("companies", { force_update: false });
   }
 
-  handleChange(event) {
-    this.setState({
-      search: event.target.value,
-      suggestions: this.getSuggestions(event.target.value)
-    });
-  }
-
   render() {
+    const handleChange = event => {
+      this.setState({
+        search: event.target.value,
+        suggestions: this.getSuggestions(event.target.value),
+        listFocused: true,
+        currFocus: -1
+      });
+    };
+
+    const select = value => {
+      this.setState({ search: value, listFocused: false, currFocus: -1 });
+    };
+
+    const closeList = () => {
+      this.setState({ search: "", listFocused: false, currFocus: -1 });
+    };
+
+    const getCompanies = () => {
+      return this.state.suggestions.map((company, i, arr) => {
+        return (
+          <div
+            key={i}
+            onClick={e => {
+              select(company.symbol);
+            }}
+            className={
+              i === this.state.currFocus ? "autocomplete-active" : null
+            }
+          >
+            <span>{company.symbol + " - " + company.name}</span>
+            <input type="hidden" value={company.symbol} />
+          </div>
+        );
+      });
+    };
+
+    const handleKeyDown = event => {
+      let currFocus = this.state.currFocus;
+      const suggestions = this.state.suggestions;
+      switch (event.keyCode) {
+        case 40: // down
+          event.preventDefault();
+          currFocus = (currFocus + 1) % suggestions.length;
+          this.setState({
+            currFocus: currFocus,
+            search: currFocus === -1 ? "" : suggestions[currFocus].symbol
+          });
+          break;
+        case 38: // up
+          event.preventDefault();
+          currFocus =
+            currFocus > 0 ? this.state.currFocus - 1 : suggestions.length - 1;
+          this.setState({
+            currFocus: currFocus,
+            search: currFocus === -1 ? "" : suggestions[currFocus].symbol
+          });
+          break;
+        case 13: // enter
+          if (currFocus > -1) {
+            event.preventDefault();
+            select(suggestions[currFocus].symbol);
+          }
+          break;
+        default:
+          break;
+      }
+    };
+
     return (
-      <div>
+      <div className="autocomplete">
         <input
           type="text"
           value={this.state.search}
-          onChange={this.handleChange}
+          list="companies-list"
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
         />
-        <table id="companies_table">
-          <tbody>
-            <tr>
-              <th>Symbol</th>
-              <th>Name</th>
-            </tr>
-            {this.state.suggestions.map(company => {
-              return (
-                <tr>
-                  <td>{company.symbol}</td>
-                  <td>{company.name}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div
+          id="autocomplete-list"
+          onBlur={closeList}
+          className="autocomplete-items"
+        >
+          {this.state.listFocused > 0 ? getCompanies() : null}
+        </div>
       </div>
     );
   }
