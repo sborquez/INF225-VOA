@@ -1,0 +1,59 @@
+:root {
+  --color1: #7289da;
+  --color2: #ffffff;
+  --color3: #99aab5;
+  --color4: #2c2f33;
+  --color5: #23272a;
+}
+
+form {
+  display: grid;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background-color: var(--color5);
+  margin: 0;
+}
+
+a.select:hover {
+  background-color: var(--color4);
+}
+
+.highlight {
+  background-color: var(--color4);
+}
+
+.inp_box input {
+  width: 100%;
+}
+
+#companies .autocomplete {
+  width: 90%;
+}
+
+#companies input {
+  width: 100%;
+}
+
+.lt_input {
+}
+
+.lt_results {
+}
+.lt_type {
+}
+.lt_button {
+}
+.lt_data {
+}
+
+.hidden {
+  display: none;
+}

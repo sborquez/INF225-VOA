@@ -58,7 +58,19 @@ class Results extends Component {
       prices.y = data.prices.y;
       prices.type = "scatter";
 
-      return <Plot data={[prices]} layout={{ title: "Americana" }} />;
+      return (
+        <Plot
+          data={[prices]}
+          layout={{
+            width: 300,
+            height: 250,
+            paper_bgcolor: "rgba(0,0,0,0)",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            autosize: true,
+            title: "Americana"
+          }}
+        />
+      );
     } else {
       return <span>Sin resultados aun (Americana)</span>;
     }
@@ -87,7 +99,15 @@ class Results extends Component {
       low.name = "Low";
 
       return (
-        <Plot data={[high, close, low]} layout={{ title: "Time Series" }} />
+        <Plot
+          data={[high, close, low]}
+          layout={{
+            width: 300,
+            height: 250,
+            autosize: true,
+            title: "Time Series"
+          }}
+        />
       );
     } else {
       return <span>Sin resultados aun (Time Series)</span>;

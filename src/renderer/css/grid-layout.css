@@ -1,0 +1,94 @@
+.lt_grid-container {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-columns: 0.9fr 1.1fr 1fr 1fr;
+  grid-template-rows: 1.3fr 0.8fr 0.9fr 0.8fr 1.2fr;
+  grid-gap: 1px;
+  grid-template-areas: "data data data button" "input type type button" "input results results results" "input results results results" "input results results results";
+}
+
+.lt_input {
+  display: grid;
+  grid-area: input;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-gap: 1px;
+  grid-template-areas: "inp1" "inp2" "inp3" "inp4";
+}
+
+.lt_inp1 {
+  grid-area: inp1;
+}
+
+.lt_inp2 {
+  grid-area: inp2;
+}
+
+.lt_inp3 {
+  grid-area: inp3;
+}
+
+.lt_inp4 {
+  grid-area: inp4;
+}
+
+.lt_results {
+  display: grid;
+  grid-area: results;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 1px;
+  grid-template-areas: "res1 res2";
+}
+
+.lt_res1 {
+  grid-area: res1;
+}
+
+.lt_res2 {
+  grid-area: res2;
+}
+
+.lt_type {
+  display: grid;
+  grid-area: type;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 1px;
+  grid-template-areas: "." ".";
+}
+
+.lt_button {
+  display: grid;
+  grid-area: button;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 1px;
+  grid-template-areas: ".";
+}
+
+.lt_data {
+  display: grid;
+  grid-area: data;
+  grid-template-columns: 1.8fr 0.2fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 1px;
+  grid-template-areas: "data-inp data1" "data-name data2";
+}
+
+.lt_data-inp {
+  grid-area: data-inp;
+}
+
+.lt_data-name {
+  grid-area: data-name;
+}
+
+.lt_data1 {
+  grid-area: data1;
+}
+
+.lt_data2 {
+  grid-area: data2;
+}

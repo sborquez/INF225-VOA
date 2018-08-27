@@ -3,48 +3,16 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="../css/main.css">
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
   <link rel="stylesheet" type="text/css" href="../css/droplist.css">
+  <link rel="stylesheet" type="text/css" href="../css/grid-layout.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body>
-  <div id="companies">
-  </div>
-  <div id="valorize">
-    <form id="main_form">
-      <label>Nombre de la Acción: </label>
-      <input name="name" type="text" placeholder="...">
-
-      <label>Código de la Acción: </label>
-      <input name="code" type="text" placeholder="...">
-
-      <label>Tasa Libre de Riesgo: </label>
-      <input name="r" type="text" placeholder="r" value="0.05">
-
-      <label>Precio de compra</label>
-      <input name="strike_price" type="number" placeholder="..." value="30">
-
-      <label>Tiempo de Madurez</label>
-      <input name="maturity_time" type="date" placeholder="..." value="2019-01-01">
-
-      <label>No. de simulaciones</label>
-      <input name="simulations" type="number" value=1000>
-
-      <label>Tipo: </label>
-      <select name="option_type">
-        <option value="EU">Europea</option>
-        <option value="USA">Americana</option>
-      </select>
-
-      <label>Ruta del archivo csv: </label>
-      <button type="button" id="file_submit">Elegir archivo...</button>
-      <input id="data_input" name="filepath_data" type="hidden">
-      <button type="button" id="local_submit">Valorizar Archivo</button>
-      <button type="button" id="remote_submit">Valorizar de Internet</button>
-    </form>
-  </div>
-  <div id="prices"></div>
-  <div id="root"></div>
+  <form id="main_form">
+    <div id="app"></div>
+  </form>
   <script>
     require("../js/index");
   </script>
