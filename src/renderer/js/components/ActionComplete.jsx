@@ -10,6 +10,7 @@ class ActionComplete extends Component {
       companies: [],
       suggestions: [],
       search: "",
+      placeholder: "",
       listFocused: false,
       currFocus: -1
     };
@@ -52,6 +53,7 @@ class ActionComplete extends Component {
     const select = company => {
       this.setState({
         search: "",
+        placeholder: company.symbol + "-" + company.name,
         listFocused: false,
         currFocus: -1,
         selected: company
@@ -114,6 +116,11 @@ class ActionComplete extends Component {
             value={this.state.search}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            placeholder={
+              this.state.placeholder.length > 0
+                ? this.state.placeholder
+                : "Buscar una acción..."
+            }
           />
           <div id="autocomplete-list" className="autocomplete-items">
             {this.state.listFocused > 0 ? getCompanies() : null}

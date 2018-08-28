@@ -12,10 +12,12 @@ class Companies extends Component {
       company: null,
       filename: null
     };
+    this.handleNewCompany = this.handleNewCompany.bind(this);
   }
 
   handleNewCompany(company) {
-    this.props.onUpdate(this.state.mode, company);
+    console.log(company);
+    this.props.onNewCompany(company);
   }
 
   render() {
@@ -50,7 +52,7 @@ class Companies extends Component {
               <button type="button" id="file_submit" onClick={openFile}>
                 {this.state.filename
                   ? this.state.filename
-                  : "Seleccione un archivo..."}
+                  : "Seleccionar un archivo..."}
               </button>
               <input
                 id="data_input"
@@ -61,7 +63,6 @@ class Companies extends Component {
             </React.Fragment>
           )}
         </div>
-        <div className="lt_data-name" />
         <a
           href="#"
           className={

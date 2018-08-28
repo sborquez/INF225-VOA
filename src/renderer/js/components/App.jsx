@@ -25,6 +25,7 @@ class App extends Component {
 
     this.handleNewParams = this.handleNewParams.bind(this);
     this.handleNewFile = this.handleNewFile.bind(this);
+    this.handleNewCompany = this.handleNewCompany.bind(this);
     this.valorize = this.valorize.bind(this);
 
     ipcRenderer.on("results", (event, results) => {
@@ -82,7 +83,7 @@ class App extends Component {
       <div className="lt_grid-container">
         <div className="lt_data" id="companies">
           <Companies
-            onUpdate={this.handleNewCompany}
+            onNewCompany={this.handleNewCompany}
             onFilename={this.handleNewFile}
           />
         </div>

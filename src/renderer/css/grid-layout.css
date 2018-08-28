@@ -20,10 +20,10 @@
   grid-template-columns: 1.8fr 0.2fr;
   grid-template-rows: 1fr 1fr;
   grid-gap: 0px;
-  grid-template-areas: "data-inp data1" "data-name data2";
+  grid-template-areas: "data-inp data1" "data-inp data2";
 }
 
-.lt_data-inp {
+.data-inp {
   grid-area: data-inp;
 }
 
