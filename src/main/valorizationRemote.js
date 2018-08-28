@@ -4,7 +4,7 @@ const rendererDir = path.join(__dirname, "../renderer");
 
 function valorizeRemote(callback, args, download_path) {
   let csv_path;
-  let plot_obj;
+  const plot = {};
 
   args.download_path = download_path;
   const call = new PythonCall("calculate.py", args);
@@ -14,11 +14,15 @@ function valorizeRemote(callback, args, download_path) {
   });
 
   call.onStatus("plot generated", plot_json => {
-    plot_obj = JSON.parse(plot_json);
+    plot.TS = JSON.parse(plot_json);
+  });
+
+  call.onResult(result => {
+    plot.res = JSON.parse(result);
   });
 
   call.onEnd(() => {
-    callback(plot_obj, csv_path);
+    callback(plot, csv_path);
   });
 
   call.start();
