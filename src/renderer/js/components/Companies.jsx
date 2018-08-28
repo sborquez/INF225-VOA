@@ -5,8 +5,8 @@ const { ipcRenderer, remote } = require("electron");
 const dialog = remote.dialog;
 
 class Companies extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       mode: 0,
       company: null,
@@ -42,7 +42,7 @@ class Companies extends Component {
 
     return (
       <React.Fragment>
-        <div className="lt_area-overlap data-inp highlight">
+        <div className="lt_area-overlap data-inp">
           {this.state.mode === 0 ? (
             <ActionComplete onUpdate={this.handleNewCompany} />
           ) : (
@@ -61,18 +61,20 @@ class Companies extends Component {
             </React.Fragment>
           )}
         </div>
-        <div className="lt_data-name highlight" />
+        <div className="lt_data-name" />
         <a
+          href="#"
           className={
-            "lt_data1 " + (this.state.mode === 0 ? "highlight" : "select")
+            "lt_data1 data-switch" + (this.state.mode === 0 ? "" : " unselect")
           }
           onClick={() => setMode(0)}
         >
           <i className="material-icons">cloud</i>
         </a>
         <a
+          href="#"
           className={
-            "lt_data2 " + (this.state.mode === 1 ? "highlight" : "select")
+            "lt_data2 data-switch" + (this.state.mode === 1 ? "" : " unselect")
           }
           onClick={() => setMode(1)}
         >

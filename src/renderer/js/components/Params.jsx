@@ -6,8 +6,8 @@ const { ipcRenderer, remote } = require("electron");
 const dialog = remote.dialog;
 
 class Params extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       r: 0.05,
       initial_price: 30,

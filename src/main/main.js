@@ -23,7 +23,7 @@ let resultWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
-    height: 715,
+    height: 500,
     title: "Valorización de Opciones",
     resizable: false
   });
@@ -81,11 +81,15 @@ function getDateParams(maturity_time) {
 }
 
 function showResults(plots, csv) {
-  mainWindow.webContents.send("results", {
-    res: plots.res,
-    TS: plots.TS,
-    csv: csv
-  });
+  if (plots) {
+    mainWindow.webContents.send("results", {
+      res: plots.res,
+      TS: plots.TS,
+      csv: csv
+    });
+  } else {
+    mainWindow.webContents.send("no results");
+  }
 }
 
 ipc.on("valorize local", (event, args) => {

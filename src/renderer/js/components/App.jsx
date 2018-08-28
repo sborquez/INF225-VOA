@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import OptionType from "./OptionType";
 import Companies from "./Companies";
 import Results from "./Results";
 import Params from "./Params";
@@ -14,7 +13,7 @@ class App extends Component {
       strike_price: 30,
       maturity_time: "2019-01-01",
       simulations: 1000,
-      option_type: "EU",
+      display_type: "ts",
       filepath_data: null,
       code: "",
       name: ""
@@ -24,18 +23,43 @@ class App extends Component {
     this.handleNewFile = this.handleNewFile.bind(this);
     this.handleNewType = this.handleNewType.bind(this);
     this.valorize = this.valorize.bind(this);
+    this.valorizeOption = this.valorizeOption.bind(this);
+
+    ipcRenderer.on("results", (event, results) => {
+      this.setState({ waiting: false });
+    });
+
+    ipcRenderer.on("no results", (event, results) => {
+      this.setState({ waiting: false });
+    });
   }
 
   valorize() {
-    const params = Object.assign({}, this.state);
-    if (this.state.filepath_data) {
-      ipcRenderer.send("valorize local", params);
-    } else {
-      ipcRenderer.send("valorize remote", params);
+    this.valorizeOption("eu");
+  }
+
+  valorizeOption(option_type) {
+    const params = {
+      r: this.state.r,
+      strike_price: this.state.strike_price,
+      maturity_time: this.state.maturity_time,
+      simulations: this.state.simulations,
+      option_type: option_type,
+      filepath_data: this.state.filepath_data,
+      code: this.state.code,
+      name: this.state.name
+    };
+    if (!this.state.waiting) {
+      if (this.state.filepath_data) {
+        ipcRenderer.send("valorize local", params);
+      } else {
+        ipcRenderer.send("valorize remote", params);
+      }
+      this.setState({ waiting: true });
     }
   }
 
-  handleNewParams(r, initial_price, maturity_time, simulations) {
+  handleNewParams(r, strike_price, maturity_time, simulations) {
     this.setState({
       r: r,
       strike_price: initial_price,
@@ -46,7 +70,7 @@ class App extends Component {
 
   handleNewType(type) {
     this.setState({
-      option_type: type
+      display_type: type
     });
   }
 
@@ -74,16 +98,13 @@ class App extends Component {
         </div>
         <div className="lt_button" id="valorize">
           <button type="button" onClick={this.valorize}>
-            Valorizar
+            {this.state.waiting ? <div className="loader" /> : "Valorizar"}
           </button>
         </div>
         <div className="lt_input">
           <Params onNewParams={this.handleNewParams} />
         </div>
         <div className="lt_results">
-          <div className="lt_type">
-            <OptionType onUpdate={this.handleNewType} />
-          </div>
           <Results />
         </div>
       </div>
