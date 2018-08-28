@@ -2,11 +2,44 @@
   display: grid;
   height: 100%;
   width: 100%;
-  grid-template-columns: 0.9fr 1.1fr 1fr 1fr;
-  grid-template-rows: 1.3fr 0.8fr 0.9fr 0.8fr 1.2fr;
+  grid-template-columns: 0.1fr 3fr 0.1fr;
+  grid-template-rows: 0.3fr 1.4fr 0.3fr;
   grid-gap: 1px;
-  grid-template-areas: "data data data button" "input type type button" "input results results results" "input results results results" "input results results results";
+  grid-template-areas: "data data button" "input results results" "input results results";
 }
+
+* {
+  outline: none;
+}
+
+/* data */
+
+.lt_data {
+  display: grid;
+  grid-area: data;
+  grid-template-columns: 1.8fr 0.2fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 0px;
+  grid-template-areas: "data-inp data1" "data-name data2";
+}
+
+.lt_data-inp {
+  grid-area: data-inp;
+}
+
+.lt_data-name {
+  grid-area: data-name;
+}
+
+.lt_data1 {
+  grid-area: data1;
+}
+
+.lt_data2 {
+  grid-area: data2;
+}
+
+/* input */
 
 .lt_input {
   display: grid;
@@ -33,31 +66,43 @@
   grid-area: inp4;
 }
 
+/* results */
+
 .lt_results {
   display: grid;
   grid-area: results;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.2 1.8fr;
   grid-gap: 1px;
-  grid-template-areas: "res1 res2";
+  grid-template-areas: "type" "display";
 }
 
-.lt_res1 {
-  grid-area: res1;
-}
-
-.lt_res2 {
-  grid-area: res2;
+.lt_display {
+  grid-area: display;
 }
 
 .lt_type {
   display: grid;
   grid-area: type;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
   grid-gap: 1px;
   grid-template-areas: "." ".";
 }
+
+.lt_type_eur {
+  grid-area: eur;
+}
+
+.lt_type_usa {
+  grid-area: usa;
+}
+
+.lt_type_ts {
+  grid-area: ts;
+}
+
+/* button */
 
 .lt_button {
   display: grid;
@@ -66,29 +111,4 @@
   grid-template-rows: 1fr;
   grid-gap: 1px;
   grid-template-areas: ".";
-}
-
-.lt_data {
-  display: grid;
-  grid-area: data;
-  grid-template-columns: 1.8fr 0.2fr;
-  grid-template-rows: 1fr 1fr;
-  grid-gap: 1px;
-  grid-template-areas: "data-inp data1" "data-name data2";
-}
-
-.lt_data-inp {
-  grid-area: data-inp;
-}
-
-.lt_data-name {
-  grid-area: data-name;
-}
-
-.lt_data1 {
-  grid-area: data1;
-}
-
-.lt_data2 {
-  grid-area: data2;
 }

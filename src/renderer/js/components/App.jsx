@@ -66,25 +66,25 @@ class App extends Component {
   render() {
     return (
       <div className="lt_grid-container">
-        <Params onNewParams={this.handleNewParams} />
-        <div className="lt_results">
-          <Results />
-        </div>
-        <div className="lt_type">
-          <OptionType onUpdate={this.handleNewType} />
-        </div>
-        <div className="lt_button">
-          <div id="valorize">
-            <button type="button" onClick={this.valorize}>
-              Valorizar
-            </button>
-          </div>
-        </div>
-        <div className="lt_data highlight" id="companies">
+        <div className="lt_data" id="companies">
           <Companies
             onUpdate={this.handleNewCompany}
             onFilename={this.handleNewFile}
           />
+        </div>
+        <div className="lt_button" id="valorize">
+          <button type="button" onClick={this.valorize}>
+            Valorizar
+          </button>
+        </div>
+        <div className="lt_input">
+          <Params onNewParams={this.handleNewParams} />
+        </div>
+        <div className="lt_results">
+          <div className="lt_type">
+            <OptionType onUpdate={this.handleNewType} />
+          </div>
+          <Results />
         </div>
       </div>
     );

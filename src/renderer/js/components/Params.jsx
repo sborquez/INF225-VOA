@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import DatePicker from "react-datepicker";
+import moment from "moment";
 
 const { ipcRenderer, remote } = require("electron");
 const dialog = remote.dialog;
@@ -9,7 +11,7 @@ class Params extends Component {
     this.state = {
       r: 0.05,
       initial_price: 30,
-      maturity_time: "2019-01-01",
+      maturity_time: moment(),
       simulations: 1000
     };
 
@@ -53,9 +55,9 @@ class Params extends Component {
 
   render() {
     return (
-      <div className="lt_input">
-        <div className="lt_area-overlap inp1">
-          <label>Tasa Libre de Riesgo: </label>
+      <React.Fragment>
+        <div className="lt_area-overlap inp1 inp_box">
+          <label>Tasa Libre de Riesgo</label>
           <input
             name="r"
             type="text"
@@ -74,10 +76,9 @@ class Params extends Component {
         </div>
         <div className="lt_inp3 inp_box">
           <label>Tiempo de Madurez</label>
-          <input
+          <DatePicker
             name="maturity_time"
-            type="date"
-            value={this.state.maturity_time}
+            selected={this.state.maturity_time}
             onChange={this.handleChangeTime}
           />
         </div>
@@ -90,7 +91,7 @@ class Params extends Component {
             onChange={this.handleChangeSim}
           />
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }
