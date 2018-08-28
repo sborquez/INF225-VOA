@@ -76,6 +76,10 @@ a.select:hover {
   color: var(--color3);
 }
 
+.lt_inp5 div {
+  padding-top: 12px;
+}
+
 .lt_inp5 div:hover {
   background-color: var(--color1);
   text-align: center;
@@ -88,6 +92,7 @@ a.select:hover {
   background-color: var(--color1);
   color: var(--color2);
   cursor: default;
+  border-bottom: 4px solid var(--color4);
 }
 
 /* button */
@@ -110,7 +115,8 @@ a.select:hover {
 }
 
 .type-box {
-  padding-top: 4%;
+  border-top: 4px solid transparent;
+  padding-top: 3%;
   font-size: 14px;
   font-weight: bold;
   color: var(--color3);
@@ -127,6 +133,7 @@ a.select:hover {
 }
 
 .type-box.selected {
+  border-top: 4px solid var(--color4);
   background-color: var(--color1);
   color: var(--color2);
   cursor: default;

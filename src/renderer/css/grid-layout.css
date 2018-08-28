@@ -4,7 +4,7 @@
   width: 100%;
   grid-template-columns: 0.6fr 3fr 0.1fr;
   grid-template-rows: 0.3fr 1.4fr 0.3fr;
-  grid-gap: 1px;
+  grid-gap: 0;
   grid-template-areas: "data data button" "input results results" "input results results";
 }
 
@@ -70,7 +70,7 @@
   display: grid;
   grid-area: inp5;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 0.6fr 1fr;
   grid-gap: 0;
   grid-template-areas: "inp5_label inp5_label" "inp5_eu inp5_usa";
 }
