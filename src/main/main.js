@@ -103,10 +103,10 @@ ipc.on("valorize remote", (event, args) => {
   Object.assign(args, getDateParams(args.maturity_time));
 
   console.log("calling remote valorize script");
-  console.log("arguments", "./", args);
+  console.log("arguments", "./results/", args);
 
   // TODO change download path
-  valorizeRemote(showResults, args, "./");
+  valorizeRemote(showResults, args, "./results/");
 });
 
 ipc.on("companies", (event, args) => {
