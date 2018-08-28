@@ -56,7 +56,7 @@ a.select:hover {
   width: 100%;
   background-color: transparent;
   border: none;
-  color: var(--color2);
+  color: var(--color3);
   text-align: center;
   font-size: 20px;
   margin-top: 10px;
@@ -68,6 +68,26 @@ a.select:hover {
   border-radius: 4px;
   height: 20px;
   padding: 7px;
+}
+
+.lt_inp5 {
+  text-align: center;
+  font-weight: bold;
+  color: var(--color3);
+}
+
+.lt_inp5 div:hover {
+  background-color: var(--color1);
+  text-align: center;
+  font-weight: bold;
+  color: var(--color3);
+  cursor: pointer;
+}
+
+.lt_inp5 div.selected {
+  background-color: var(--color1);
+  color: var(--color2);
+  cursor: default;
 }
 
 /* button */

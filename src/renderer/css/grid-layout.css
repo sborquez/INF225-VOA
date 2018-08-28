@@ -45,9 +45,9 @@
   display: grid;
   grid-area: input;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 1px;
-  grid-template-areas: "inp1" "inp2" "inp3" "inp4";
+  grid-template-areas: "inp1" "inp2" "inp3" "inp4" "inp5";
 }
 
 .lt_inp1 {
@@ -64,6 +64,27 @@
 
 .lt_inp4 {
   grid-area: inp4;
+}
+
+.lt_inp5 {
+  display: grid;
+  grid-area: inp5;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 0;
+  grid-template-areas: "inp5_label inp5_label" "inp5_eu inp5_usa";
+}
+
+.lt_inp5 label {
+  grid-area: inp5_label;
+}
+
+.lt_inp5_eu {
+  grid-area: inp5_eu;
+}
+
+.lt_inp5_usa {
+  grid-area: inp5_usa;
 }
 
 /* results */
@@ -87,19 +108,15 @@
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr;
   grid-gap: 1px;
-  grid-template-areas: "ts eu usa";
+  grid-template-areas: "in out";
 }
 
-.lt_type_ts {
-  grid-area: ts;
+.lt_type_in {
+  grid-area: in;
 }
 
-.lt_type_eu {
-  grid-area: eu;
-}
-
-.lt_type_usa {
-  grid-area: usa;
+.lt_type_out {
+  grid-area: out;
 }
 
 /* button */

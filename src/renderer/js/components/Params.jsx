@@ -11,8 +11,12 @@ class Params extends Component {
     this.state = {
       r: 0.05,
       initial_price: 30,
-      maturity_time: moment(),
-      simulations: 1000
+      maturity_time: moment()
+        .add(1, "years")
+        .format("YYYY-MM-DD"),
+      simulations: 1000,
+      maturity_date: moment().add(1, "years"),
+      option_type: "EU"
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -20,37 +24,43 @@ class Params extends Component {
     this.handleChangePrice = this.handleChangePrice.bind(this);
     this.handleChangeTime = this.handleChangeTime.bind(this);
     this.handleChangeSim = this.handleChangeSim.bind(this);
+    this.handleChangeType = this.handleChangeType.bind(this);
   }
 
   handleChangeR(e) {
-    this.setState({ r: e.target.value });
-    this.handleChange();
+    const change = { r: e.target.value };
+    this.setState(change);
+    this.handleChange(change);
   }
 
   handleChangePrice(e) {
     this.setState({ initial_price: e.target.value });
-    this.handleChange();
+    this.handleChange({ strike_price: e.target.value });
   }
 
-  handleChangeTime(e) {
-    this.setState({ maturity_time: e.target.value });
-    this.handleChange();
+  handleChangeTime(m) {
+    if (!m.isBefore(moment())) {
+      this.setState({
+        maturity_time: m.format("YYYY-MM-DD"),
+        maturity_date: m
+      });
+      this.handleChange({ maturity_time: m.format("YYYY-MM-DD") });
+    }
   }
 
   handleChangeSim(e) {
-    this.setState({ simulations: e.target.value });
-    this.handleChange();
+    const change = { simulations: e.target.value };
+    this.setState(change);
+    this.handleChange(change);
   }
 
-  handleChange() {
-    if (this.props.onNewParams) {
-      this.props.onNewParams(
-        this.state.r,
-        this.state.initial_price,
-        this.state.maturity_time,
-        this.state.simulations
-      );
-    }
+  handleChangeType(type) {
+    this.setState({ option_type: type });
+    this.handleChange({ option_type: type });
+  }
+
+  handleChange(change) {
+    if (this.props.onNewParams) this.props.onNewParams(change);
   }
 
   render() {
@@ -78,7 +88,7 @@ class Params extends Component {
           <label>Tiempo de Madurez</label>
           <DatePicker
             name="maturity_time"
-            selected={this.state.maturity_time}
+            selected={this.state.maturity_date}
             onChange={this.handleChangeTime}
           />
         </div>
@@ -90,6 +100,27 @@ class Params extends Component {
             value={this.state.simulations}
             onChange={this.handleChangeSim}
           />
+        </div>
+        <div className="lt_inp5 inp_box">
+          <label>Tipo</label>
+          <div
+            className={
+              "lt_inp5_eu" +
+              (this.state.option_type === "EU" ? " selected" : "")
+            }
+            onClick={() => this.handleChangeType("EU")}
+          >
+            EU
+          </div>
+          <div
+            className={
+              "lt_inp5_usa" +
+              (this.state.option_type === "USA" ? " selected" : "")
+            }
+            onClick={() => this.handleChangeType("USA")}
+          >
+            USA
+          </div>
         </div>
       </React.Fragment>
     );

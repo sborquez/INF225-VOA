@@ -16,11 +16,21 @@ class Results extends Component {
         EU: undefined,
         TS: undefined
       };
+      let option_type;
 
-      if (res.type === "USA") new_data.USA = res.result.plot_data;
-      if (res.type === "EU") new_data.EU = res.result;
+      if (res.type === "USA") {
+        new_data.USA = res.result.plot_data;
+        option_type = "usa";
+      } else if (res.type === "EU") {
+        new_data.EU = res.result;
+        option_type = "eu";
+      }
       if (TS) new_data.TS = TS;
-      this.setState({ data: new_data });
+
+      const new_state = {};
+      if (option_type) new_state.option_type = option_type;
+      new_state.data = new_data;
+      this.setState(new_state);
     });
 
     this.layout = {
@@ -48,7 +58,8 @@ class Results extends Component {
         EU: undefined,
         TS: undefined
       },
-      display_type: "ts"
+      display_type: "in",
+      option_type: "EU"
     };
 
     this.getTimeSeriesPlot = this.getTimeSeriesPlot.bind(this);
@@ -124,24 +135,18 @@ class Results extends Component {
         <div className="lt_display">
           <div
             className={
-              "disp_ts" + (this.state.display_type === "ts" ? "" : " hidden")
+              "disp_in" + (this.state.display_type === "in" ? "" : " hidden")
             }
           >
             {this.getTimeSeriesPlot()}
           </div>
           <div
             className={
-              "disp_eu" + (this.state.display_type === "eu" ? "" : " hidden")
+              "disp_out" + (this.state.display_type === "out" ? "" : " hidden")
             }
           >
-            {this.getEUPlot()}
-          </div>
-          <div
-            className={
-              "disp_usa" + (this.state.display_type === "usa" ? "" : " hidden")
-            }
-          >
-            {this.getUSAPlot()}
+            {this.state.option_type === "eu" ? this.getEUPlot() : null}
+            {this.state.option_type === "usa" ? this.getUSAPlot() : null}
           </div>
         </div>
       </React.Fragment>

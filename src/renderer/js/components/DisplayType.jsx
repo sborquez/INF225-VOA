@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class DisplayType extends Component {
   constructor(props) {
     super(props);
-    this.state = { type: "ts" };
+    this.state = { type: "in" };
 
     this.select = this.select.bind(this);
   }
@@ -18,30 +18,21 @@ class DisplayType extends Component {
       <React.Fragment>
         <div
           className={
-            "lt_type_ts type-box" +
-            (this.state.type === "ts" ? " selected" : "")
+            "lt_type_in type-box" +
+            (this.state.type === "in" ? " selected" : "")
           }
-          onClick={() => this.select("ts")}
+          onClick={() => this.select("in")}
         >
-          Time Series (Input)
+          Input: Histórico
         </div>
         <div
           className={
-            "lt_type_eu type-box" +
-            (this.state.type === "eu" ? " selected" : "")
+            "lt_type_out type-box" +
+            (this.state.type === "out" ? " selected" : "")
           }
-          onClick={() => this.select("eu")}
+          onClick={() => this.select("out")}
         >
-          <label>O. Europea (Output)</label>
-        </div>
-        <div
-          className={
-            "lt_type_usa type-box" +
-            (this.state.type === "usa" ? " selected" : "")
-          }
-          onClick={() => this.select("usa")}
-        >
-          <label>O. Americana (Output)</label>
+          <label>Output: Valorización</label>
         </div>
       </React.Fragment>
     );

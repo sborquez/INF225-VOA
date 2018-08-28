@@ -3,6 +3,8 @@ import Companies from "./Companies";
 import Results from "./Results";
 import Params from "./Params";
 
+import moment from "moment";
+
 const { ipcRenderer, remote } = require("electron");
 
 class App extends Component {
@@ -11,9 +13,11 @@ class App extends Component {
     this.state = {
       r: 0.05,
       strike_price: 30,
-      maturity_time: "2019-01-01",
+      maturity_time: moment()
+        .add(1, "years")
+        .format("YYYY-MM-DD"),
       simulations: 1000,
-      display_type: "ts",
+      option_type: "EU",
       filepath_data: null,
       code: "",
       name: ""
@@ -21,9 +25,7 @@ class App extends Component {
 
     this.handleNewParams = this.handleNewParams.bind(this);
     this.handleNewFile = this.handleNewFile.bind(this);
-    this.handleNewType = this.handleNewType.bind(this);
     this.valorize = this.valorize.bind(this);
-    this.valorizeOption = this.valorizeOption.bind(this);
 
     ipcRenderer.on("results", (event, results) => {
       this.setState({ waiting: false });
@@ -35,16 +37,12 @@ class App extends Component {
   }
 
   valorize() {
-    this.valorizeOption("eu");
-  }
-
-  valorizeOption(option_type) {
     const params = {
       r: this.state.r,
       strike_price: this.state.strike_price,
       maturity_time: this.state.maturity_time,
       simulations: this.state.simulations,
-      option_type: option_type,
+      option_type: this.state.option_type,
       filepath_data: this.state.filepath_data,
       code: this.state.code,
       name: this.state.name
@@ -59,19 +57,11 @@ class App extends Component {
     }
   }
 
-  handleNewParams(r, strike_price, maturity_time, simulations) {
-    this.setState({
-      r: r,
-      strike_price: initial_price,
-      maturity_time: maturity_time,
-      simulations: simulations
-    });
-  }
-
-  handleNewType(type) {
-    this.setState({
-      display_type: type
-    });
+  handleNewParams(change) {
+    const new_state = Object.assign({}, this.state, change);
+    this.setState(new_state);
+    console.log(change);
+    console.log(new_state);
   }
 
   handleNewFile(filepath_data) {
@@ -98,7 +88,7 @@ class App extends Component {
         </div>
         <div className="lt_button" id="valorize">
           <button type="button" onClick={this.valorize}>
-            {this.state.waiting ? <div className="loader" /> : "Valorizar"}
+            {this.state.waiting ? "Calculando" : " Valorizar "}
           </button>
         </div>
         <div className="lt_input">
