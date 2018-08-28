@@ -27,6 +27,7 @@ function createWindow() {
     title: "Valorización de Opciones",
     resizable: false
   });
+  mainWindow.setMenu(null);
 
   mainWindow.loadURL(
     url.format({
@@ -35,8 +36,6 @@ function createWindow() {
       slashes: true
     })
   );
-
-  //mainWindow.webContents.openDevTools()
 
   mainWindow.on("closed", function() {
     mainWindow = null;
