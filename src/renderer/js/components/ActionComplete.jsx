@@ -62,7 +62,7 @@ class ActionComplete extends Component {
     };
 
     const getCompanies = () => {
-      return this.state.suggestions.map((company, i, arr) => (
+      return (this.state.suggestions.length > 0 ? this.state.suggestions.map((company, i, arr) => (
         <div
           key={i}
           onClick={e => {
@@ -73,7 +73,7 @@ class ActionComplete extends Component {
           <span>{company.symbol + " - " + company.name}</span>
           <input type="hidden" value={company.symbol} />
         </div>
-      ));
+      )) : <div><span>Cargando...</span></div>);
     };
 
     const handleKeyDown = event => {
