@@ -1,0 +1,131 @@
+.lt_grid-container {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-columns: 0.6fr 3fr 0.1fr;
+  grid-template-rows: 0.3fr 1.4fr 0.3fr;
+  grid-gap: 0;
+  grid-template-areas: "data data button" "input results results" "input results results";
+}
+
+* {
+  outline: none;
+}
+
+/* data */
+
+.lt_data {
+  display: grid;
+  grid-area: data;
+  grid-template-columns: 1.8fr 0.2fr;
+  grid-template-rows: 1fr 1fr;
+  grid-gap: 0px;
+  grid-template-areas: "data-inp data1" "data-inp data2";
+}
+
+.data-inp {
+  grid-area: data-inp;
+}
+
+.lt_data-name {
+  grid-area: data-name;
+}
+
+.lt_data1 {
+  grid-area: data1;
+}
+
+.lt_data2 {
+  grid-area: data2;
+}
+
+/* input */
+
+.lt_input {
+  display: grid;
+  grid-area: input;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-gap: 1px;
+  grid-template-areas: "inp1" "inp2" "inp3" "inp4" "inp5";
+}
+
+.lt_inp1 {
+  grid-area: inp1;
+}
+
+.lt_inp2 {
+  grid-area: inp2;
+}
+
+.lt_inp3 {
+  grid-area: inp3;
+}
+
+.lt_inp4 {
+  grid-area: inp4;
+}
+
+.lt_inp5 {
+  display: grid;
+  grid-area: inp5;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.6fr 1fr;
+  grid-gap: 0;
+  grid-template-areas: "inp5_label inp5_label" "inp5_eu inp5_usa";
+}
+
+.lt_inp5 label {
+  grid-area: inp5_label;
+}
+
+.lt_inp5_eu {
+  grid-area: inp5_eu;
+}
+
+.lt_inp5_usa {
+  grid-area: inp5_usa;
+}
+
+/* results */
+
+.lt_results {
+  display: grid;
+  grid-area: results;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.2fr 1.8fr;
+  grid-gap: 1px;
+  grid-template-areas: "type" "display";
+}
+
+.lt_display {
+  grid-area: display;
+}
+
+.lt_type {
+  display: grid;
+  grid-area: type;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 1px;
+  grid-template-areas: "in out";
+}
+
+.lt_type_in {
+  grid-area: in;
+}
+
+.lt_type_out {
+  grid-area: out;
+}
+
+/* button */
+
+.lt_button {
+  display: grid;
+  grid-area: button;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 1px;
+  grid-template-areas: ".";
+}

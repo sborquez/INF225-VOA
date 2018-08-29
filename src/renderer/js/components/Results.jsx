@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import Plot from "react-plotly.js";
 
+import DisplayType from "./DisplayType";
+
 const { ipcRenderer } = require("electron");
 
 class Results extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     ipcRenderer.on("results", (event, results) => {
       const { TS, res, csv } = results;
 
@@ -14,27 +16,60 @@ class Results extends Component {
         EU: undefined,
         TS: undefined
       };
+      let option_type;
 
-      if (res.type === "USA") new_data.USA = res.result.plot_data;
-      if (res.type === "EU") new_data.EU = res.result;
+      if (res.type === "USA") {
+        new_data.USA = res.result.plot_data;
+        option_type = "usa";
+      } else if (res.type === "EU") {
+        new_data.EU = res.result;
+        option_type = "eu";
+      }
       if (TS) new_data.TS = TS;
-      this.setState({ data: new_data });
+
+      const new_state = {};
+      if (option_type) new_state.option_type = option_type;
+      new_state.data = new_data;
+      this.setState(new_state);
     });
+
+    this.layout = {
+      width: 500,
+      height: 300,
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(0,0,0,0)",
+      autosize: true,
+      margin: {
+        l: 50,
+        r: 50,
+        b: 50,
+        t: 50,
+        pad: 4
+      },
+      font: {
+        size: 13,
+        color: "#ffffff"
+      }
+    };
 
     this.state = {
       data: {
         USA: undefined,
         EU: undefined,
         TS: undefined
-      }
+      },
+      display_type: "in",
+      option_type: "EU"
     };
 
     this.getTimeSeriesPlot = this.getTimeSeriesPlot.bind(this);
     this.getUSAPlot = this.getUSAPlot.bind(this);
-    this.getEU = this.getEU.bind(this);
+    this.getEUPlot = this.getEUPlot.bind(this);
+
+    this.handleNewType = this.handleNewType.bind(this);
   }
 
-  getEU() {
+  getEUPlot() {
     const data = this.state.data.EU;
     if (data) {
       return (
@@ -58,49 +93,63 @@ class Results extends Component {
       prices.y = data.prices.y;
       prices.type = "scatter";
 
-      return <Plot data={[prices]} layout={{ title: "Americana" }} />;
+      return <Plot data={[prices]} layout={this.layout} />;
     } else {
-      return <span>Sin resultados aun (Americana)</span>;
+      return <span />;
     }
   }
 
   getTimeSeriesPlot() {
+    const pdataFromData = (data, name) => {
+      const pdata = {};
+      pdata.x = data.x;
+      pdata.y = data.y;
+      pdata.type = "scatter";
+      pdata.name = name;
+      return pdata;
+    };
+
     if (this.state.data.TS) {
       const data = this.state.data.TS;
 
-      const high = {};
-      high.x = data.High.x;
-      high.y = data.High.y;
-      high.type = "scatter";
-      high.name = "High";
+      const high = pdataFromData(data.High, "High");
+      const close = pdataFromData(data.Close, "Close");
+      const low = pdataFromData(data.Low, "Low");
 
-      const close = {};
-      close.x = data.Close.x;
-      close.y = data.Close.y;
-      close.type = "scatter";
-      close.name = "Close";
-
-      const low = {};
-      low.x = data.Low.x;
-      low.y = data.Low.y;
-      low.type = "scatter";
-      low.name = "Low";
-
-      return (
-        <Plot data={[high, close, low]} layout={{ title: "Time Series" }} />
-      );
+      return <Plot data={[high, close, low]} layout={this.layout} />;
     } else {
-      return <span>Sin resultados aun (Time Series)</span>;
+      return <span />;
     }
+  }
+
+  handleNewType(type) {
+    this.setState({ display_type: type });
   }
 
   render() {
     return (
-      <div>
-        {this.getTimeSeriesPlot()}
-        {this.getUSAPlot()}
-        {this.getEU()}
-      </div>
+      <React.Fragment>
+        <div className="lt_type">
+          <DisplayType onNewType={this.handleNewType} />
+        </div>
+        <div className="lt_display">
+          <div
+            className={
+              "disp_in" + (this.state.display_type === "in" ? "" : " hidden")
+            }
+          >
+            {this.getTimeSeriesPlot()}
+          </div>
+          <div
+            className={
+              "disp_out" + (this.state.display_type === "out" ? "" : " hidden")
+            }
+          >
+            {this.state.option_type === "eu" ? this.getEUPlot() : null}
+            {this.state.option_type === "usa" ? this.getUSAPlot() : null}
+          </div>
+        </div>
+      </React.Fragment>
     );
   }
 }

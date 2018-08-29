@@ -1,0 +1,254 @@
+:root {
+  --color0: #23272a;
+  --color1: #2c2f33;
+  --color2: #99aab5;
+  --color3: #7289da;
+  --color4: #ffffff;
+}
+
+form {
+  display: grid;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  font-family: "PT Sans", sans-serif;
+  background-color: var(--color0);
+  margin: 0;
+}
+
+#app {
+  height: 100%;
+}
+
+a.select:hover {
+  background-color: var(--color4);
+}
+
+/* companies */
+
+#companies .autocomplete {
+  width: 90%;
+}
+
+#companies input {
+  width: 100%;
+  height: 100%;
+  font-size: 20px;
+  color: var(--color3);
+  padding-top: 4%;
+}
+
+#companies button {
+  border: none;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  font-size: 20px;
+  color: var(--color3);
+}
+
+#companies button:hover {
+  color: var(--color4);
+}
+
+/* input */
+
+.inp_box {
+  text-align: center;
+}
+
+.inp_box label {
+  color: var(--color2);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.inp_box input {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  color: var(--color3);
+  text-align: center;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.lt_data input {
+  background-color: var(--color5);
+  border: none;
+  border-radius: 4px;
+  height: 20px;
+  padding: 7px;
+}
+
+.lt_inp5 {
+  text-align: center;
+  font-weight: bold;
+  color: var(--color3);
+}
+
+.lt_inp5 div {
+  padding-top: 12px;
+}
+
+.lt_inp5 div:hover {
+  background-color: var(--color1);
+  text-align: center;
+  font-weight: bold;
+  color: var(--color3);
+  cursor: pointer;
+}
+
+.lt_inp5 div.selected {
+  background-color: var(--color1);
+  color: var(--color2);
+  cursor: default;
+  border-bottom: 4px solid var(--color4);
+}
+
+/* button */
+
+.lt_button button {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: var(--color1);
+  color: var(--color3);
+  font-size: 20px;
+  padding: 10px;
+}
+
+.lt_button button:hover {
+  width: 100%;
+  height: 100%;
+  color: var(--color2);
+}
+
+.lt_button button:active {
+  background-color: var(--color2);
+}
+
+.type-box {
+  border-top: 4px solid transparent;
+  padding-top: 3%;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--color3);
+}
+
+.type-box:hover {
+  color: var(--color4);
+  cursor: pointer;
+}
+
+.type-box:hover * {
+  color: var(--color4);
+  cursor: pointer;
+}
+
+.type-box.selected {
+  border-top: 4px solid var(--color4);
+  background-color: var(--color1);
+  color: var(--color2);
+  cursor: default;
+}
+
+.type-box.selected * {
+  cursor: default;
+}
+
+/* utils */
+
+.hidden {
+  display: none;
+}
+
+.bg1 {
+  background-color: var(--color1);
+}
+
+.bg2 {
+  background-color: var(--color2);
+}
+
+.bg3 {
+  background-color: var(--color3);
+}
+
+.bg4 {
+  background-color: var(--color4);
+}
+
+.bg5 {
+  background-color: var(--color5);
+}
+
+/* display types */
+
+.type-box {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.type-box input[type="radio"] {
+  display: none;
+}
+
+.data-switch {
+  text-align: center;
+  color: var(--color2);
+  background-color: var(--color1);
+  cursor: default;
+  border-left: 4px solid var(--color4);
+  padding-top: 5px;
+}
+
+.data-switch:active {
+  text-align: center;
+  color: var(--color2);
+  background-color: var(--color1);
+}
+
+.data-switch.unselect {
+  color: var(--color3);
+  background-color: transparent;
+  cursor: pointer;
+  border-left: 4px solid transparent;
+}
+
+/* display */
+
+.lt_display {
+  background-color: var(--color1);
+  text-align: center;
+}
+
+.loader {
+  border: 4px solid transparent; /* Light grey */
+  border-top: 4px solid #3498db; /* Blue */
+  border-radius: 50%;
+  height: 100%;
+  animation: spin 2s linear infinite;
+}
+
+.loader:after {
+  content: "";
+  display: block;
+  padding-right: 100%;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

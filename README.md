@@ -6,8 +6,13 @@
 * Node Package Manager (NPM)
 * Python 3
 * conda (for development)
-* QuantLib Python Module
-* Pandas
+* Módulos de Python:
+  * numpy
+  * pandas
+  * pandas-datareader
+  * beautifulsoup4
+  * requests
+  * matplotlib
 
 ## Uso
 

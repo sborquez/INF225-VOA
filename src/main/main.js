@@ -23,10 +23,11 @@ let resultWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
-    height: 715,
+    height: 500,
     title: "Valorización de Opciones",
     resizable: false
   });
+  //mainWindow.setMenu(null);
 
   mainWindow.loadURL(
     url.format({
@@ -35,8 +36,6 @@ function createWindow() {
       slashes: true
     })
   );
-
-  //mainWindow.webContents.openDevTools()
 
   mainWindow.on("closed", function() {
     mainWindow = null;
@@ -81,11 +80,15 @@ function getDateParams(maturity_time) {
 }
 
 function showResults(plots, csv) {
-  mainWindow.webContents.send("results", {
-    res: plots.res,
-    TS: plots.TS,
-    csv: csv
-  });
+  if (plots) {
+    mainWindow.webContents.send("results", {
+      res: plots.res,
+      TS: plots.TS,
+      csv: csv
+    });
+  } else {
+    mainWindow.webContents.send("no results");
+  }
 }
 
 ipc.on("valorize local", (event, args) => {
@@ -100,10 +103,10 @@ ipc.on("valorize remote", (event, args) => {
   Object.assign(args, getDateParams(args.maturity_time));
 
   console.log("calling remote valorize script");
-  console.log("arguments", "./", args);
+  console.log("arguments", "./results/", args);
 
   // TODO change download path
-  valorizeRemote(showResults, args, "./");
+  valorizeRemote(showResults, args, "./results/");
 });
 
 ipc.on("companies", (event, args) => {

@@ -1,3 +1,4 @@
+import os
 import sys
 import json
 from time import sleep
@@ -7,6 +8,9 @@ from prices import Prices
 from options import EuropeanOptionPricing, AmericanOptionPricing
 from plotter import Plotter
 
+def mkdir(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 
 def main():
@@ -23,6 +27,7 @@ def main():
     if args["download_path"] != None:
         Protocol.sendStatus("starting download", args["code"])
         # Use this CSV file in the load step.
+        mkdir(args["download_path"])
         args["filepath_data"] =  prices.download(args["code"], args["start"], args["end"], args["download_path"], "Yahoo")
         Protocol.sendStatus("download ended", args["filepath_data"])
 
